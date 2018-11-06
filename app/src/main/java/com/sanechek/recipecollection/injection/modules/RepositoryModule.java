@@ -1,4 +1,4 @@
-package com.sanechek.recipecollection.injection;
+package com.sanechek.recipecollection.injection.modules;
 
 import android.content.Context;
 

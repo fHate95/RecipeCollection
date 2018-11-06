@@ -1,4 +1,4 @@
-package com.sanechek.recipecollection.injection;
+package com.sanechek.recipecollection.injection.modules;
 
 import android.app.Application;
 import android.content.Context;
@@ -6,13 +6,19 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 
+import com.sanechek.recipecollection.BuildConfig;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+
+import static com.sanechek.recipecollection.injection.modules.RetrofitModule.CONNECTION_URL;
 
 @Module
 public class AppModule {
@@ -51,6 +57,13 @@ public class AppModule {
     @Singleton
     public SimpleDateFormat provideDateFormat() {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+    }
+
+    @Provides
+    @Named(CONNECTION_URL)
+    @Inject
+    public String provideConnectionString() {
+        return BuildConfig.SERVER_URL;
     }
 
 }

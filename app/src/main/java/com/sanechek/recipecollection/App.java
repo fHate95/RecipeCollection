@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
 import com.sanechek.recipecollection.injection.AppComponent;
-import com.sanechek.recipecollection.injection.AppModule;
+import com.sanechek.recipecollection.injection.modules.AppModule;
 import com.sanechek.recipecollection.injection.DaggerAppComponent;
 
 import io.realm.Realm;
