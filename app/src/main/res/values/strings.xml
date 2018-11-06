@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">RecipeCollection</string>
+
+    <string name="main">Main</string>
+    <string name="tools">Tools</string>
+    <string name="settings">Settings</string>
+    <string name="share">Share</string>
+
+</resources>
