@@ -3,9 +3,15 @@ package com.sanechek.recipecollection.data;
 public class DishType {
 
     private String name;
+    private String query;
 
-    public DishType(String name) {
+    public DishType() {
+
+    }
+
+    public DishType(String name, String query) {
         this.name = name;
+        this.query = query;
     }
 
     public void setName(String name) {
@@ -14,5 +20,13 @@ public class DishType {
 
     public String getName() {
         return name;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
+    public String getQuery() {
+        return query;
     }
 }

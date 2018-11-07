@@ -1,28 +1,22 @@
 package com.sanechek.recipecollection.api.data.search;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Ingredient {
 
     @SerializedName("uri")
-    @Expose
     private String uri;
 
     @SerializedName("quantity")
-    @Expose
     private float quantity;
 
     @SerializedName("measure")
-    @Expose
     private Measure measure;
 
     @SerializedName("weight")
-    @Expose
     private float weight;
 
     @SerializedName("food")
-    @Expose
     private Food food;
 
     public String getUri() {

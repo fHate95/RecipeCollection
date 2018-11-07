@@ -31,7 +31,7 @@ public class SignatureInterceptor implements Interceptor {
             signature = Base64.encodeToString(" ".getBytes(),Base64.DEFAULT); // (" ".getBytes());
         }
         Request newRequest = oldRequest.newBuilder()
-                .addHeader("X-Signature", signature.trim())
+//                .addHeader("X-Signature", signature.trim())
                 .build();
 
         Log.d("Signature","Added signature to request " + reqBodyString);

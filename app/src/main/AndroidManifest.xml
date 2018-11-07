@@ -24,6 +24,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".BaseActivity" />
+        <activity android:name=".ui.activity.DishActivity" />
+
     </application>
 
 </manifest>

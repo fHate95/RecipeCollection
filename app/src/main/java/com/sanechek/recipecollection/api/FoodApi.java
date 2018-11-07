@@ -25,12 +25,4 @@ public interface FoodApi {
     @GET("search")
     Single<Hits> search(@Query(ARG_QUERY) String query, @Query(ARG_FROM) int from, @Query(ARG_TO) int to, @Query(ARG_APP_ID) String appId, @Query(ARG_APP_KEY) String appKey);
 
-    @CheckResult
-    @GET("public-api/v1.2/locations")
-    Single<List<City>> getCity(@Query("lang") String lang);
-
-    @CheckResult
-    @GET("public-api/v1.2/locations")
-    Single<List<City>> getCity();
-
 }
