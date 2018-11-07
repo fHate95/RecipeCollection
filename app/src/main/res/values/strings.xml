@@ -6,4 +6,8 @@
     <string name="settings">Settings</string>
     <string name="share">Share</string>
 
+    <!--RecipeDetail-->
+    <string name="source">Source</string>
+    <string name="recipe">Recipe:</string>
+
 </resources>

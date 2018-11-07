@@ -11,6 +11,7 @@
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorBackground">#F0F0F0</color>
 
     <color name="colorPositive">#27A844</color>
     <color name="colorNegative">#e64641</color>

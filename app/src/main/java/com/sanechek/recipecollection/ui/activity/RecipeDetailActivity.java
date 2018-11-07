@@ -1,11 +1,10 @@
 package com.sanechek.recipecollection.ui.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,8 +23,10 @@ import io.realm.Realm;
 public class RecipeDetailActivity extends BaseActivity {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.tv_source) TextView tvSource;
     @BindView(R.id.tv_content) TextView tvContent;
     @BindView(R.id.iv_photo) AppCompatImageView ivPhoto;
+    @BindView(R.id.iv_star) AppCompatImageView ivStar;
 
     private Realm realm;
     private AppComponent appComponent;
@@ -58,16 +59,24 @@ public class RecipeDetailActivity extends BaseActivity {
             getSupportActionBar().setTitle(recipe.getLabel());
         }
 
+        /* View ClickListeners */
+        ivStar.setOnClickListener(view -> {
+            ivStar.setImageResource(R.drawable.ic_star_picked);
+        });
+        tvSource.setOnClickListener(view -> {
+            Toast.makeText(this, recipe.getUrl(), Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void setupData() {
         Glide.with(this)
                 .load(recipe.getImage())
                 .into(ivPhoto);
+        tvSource.setText(recipe.getSource());
         StringBuilder text = new StringBuilder();
             for (Ingredient ingredient : recipe.getIngredients()) {
                 try {
-                    text.append("\n");
+                    text.append(getString(R.string.recipe)).append("\n");
                     text.append("* ").append(ingredient.getText());
                 } catch (Exception e) {
                     e.printStackTrace();

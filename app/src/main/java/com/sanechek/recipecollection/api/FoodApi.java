@@ -1,13 +1,7 @@
 package com.sanechek.recipecollection.api;
 
 import android.support.annotation.CheckResult;
-
-import com.sanechek.recipecollection.BuildConfig;
-import com.sanechek.recipecollection.api.data.city.City;
-import com.sanechek.recipecollection.api.data.city.CityResponse;
 import com.sanechek.recipecollection.api.data.search.Hits;
-
-import java.util.List;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
