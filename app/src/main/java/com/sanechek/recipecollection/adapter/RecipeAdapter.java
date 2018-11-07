@@ -76,7 +76,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         @Override
         public void onClick(View view) {
-
+            switch (view.getId()) {
+                case R.id.item_view:
+                    clickListener.onItemClick(items.get(getAdapterPosition()));
+                    break;
+            }
         }
     }
 

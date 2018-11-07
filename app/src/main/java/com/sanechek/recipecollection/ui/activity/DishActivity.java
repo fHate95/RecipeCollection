@@ -2,6 +2,7 @@ package com.sanechek.recipecollection.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
@@ -15,6 +16,7 @@ import com.sanechek.recipecollection.BuildConfig;
 import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.adapter.RecipeAdapter;
 import com.sanechek.recipecollection.api.data.search.Hit;
+import com.sanechek.recipecollection.api.utils.KeyProvider;
 import com.sanechek.recipecollection.injection.AppComponent;
 import com.sanechek.recipecollection.util.DisposableManager;
 
@@ -50,7 +52,7 @@ public class DishActivity extends BaseActivity {
         realm = Realm.getDefaultInstance();
 
         if (getIntent() != null) {
-            searchQuery = getIntent().getStringExtra("query");
+            searchQuery = getIntent().getStringExtra(KeyProvider.KEY_SEARCH_QUERY);
             getRecipes();
         } else {
             Toast.makeText(this, "Error: query is empty", Toast.LENGTH_SHORT).show();
@@ -62,7 +64,9 @@ public class DishActivity extends BaseActivity {
         adapter = new RecipeAdapter(context, list, new RecipeAdapter.AdapterClickListener() {
             @Override
             public void onItemClick(Hit item) {
-
+                Intent intent = new Intent(context, RecipeDetailActivity.class);
+                intent.putExtra(KeyProvider.KEY_RECIPE, item.getRecipe());
+                startActivity(intent);
             }
         }, realm);
 

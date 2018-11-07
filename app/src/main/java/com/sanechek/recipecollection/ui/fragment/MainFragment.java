@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.adapter.DishTypesAdapter;
+import com.sanechek.recipecollection.api.utils.KeyProvider;
 import com.sanechek.recipecollection.data.DishType;
 import com.sanechek.recipecollection.ui.activity.ActivityListener;
 import com.sanechek.recipecollection.ui.activity.DishActivity;
@@ -53,12 +54,13 @@ public class MainFragment extends BaseFragment implements ActivityListener {
         setRecyclerView(requireContext(), dishTypes);
     }
 
+    /* Setup RecyclerView with dish data */
     private void setRecyclerView(final Context context, final ArrayList<DishType> list) {
         adapter = new DishTypesAdapter(context, list, new DishTypesAdapter.AdapterClickListener() {
             @Override
             public void onItemClick(DishType item) {
                 Intent intent = new Intent(requireContext(), DishActivity.class);
-                intent.putExtra("query", item.getName());
+                intent.putExtra(KeyProvider.KEY_SEARCH_QUERY, item.getName());
                 startActivity(intent);
             }
         }, realm);
