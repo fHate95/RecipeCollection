@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/* provide web */
 @Module
 public class NetModule {
 

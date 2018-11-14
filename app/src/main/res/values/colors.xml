@@ -15,4 +15,6 @@
 
     <color name="colorPositive">#27A844</color>
     <color name="colorNegative">#e64641</color>
+
+    <color name="colorGreyAlpha">#1E000000</color>
 </resources>

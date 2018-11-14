@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
+/* provide logger */
 @Module
 public class LoggerModule {
 

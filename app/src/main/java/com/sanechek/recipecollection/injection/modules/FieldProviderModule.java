@@ -1,5 +1,6 @@
 package com.sanechek.recipecollection.injection.modules;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.provider.Settings;
@@ -18,6 +19,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
+/* provide QueryToBodyConverterInterceptor */
 @Module
 public class FieldProviderModule {
 
@@ -25,17 +27,18 @@ public class FieldProviderModule {
     @Singleton
     @Inject
     public QueryToBodyConverterInterceptor.iFieldProvider instantiateFieldProvider(Context context, QueryToBodyConverterInterceptor.iSubjectProvider subjectProvider,
-                                                                                   InterceptorModule.iPublicKeyProvider keyProvider, SimpleDateFormat sdf){
-        return new FieldProviderImpl(context,keyProvider,sdf, subjectProvider);
+                                                                                   InterceptorModule.iPublicKeyProvider keyProvider, SimpleDateFormat sdf) {
+        return new FieldProviderImpl(context, keyProvider, sdf, subjectProvider);
     }
 
-    private static class FieldProviderImpl implements QueryToBodyConverterInterceptor.iFieldProvider{
+    private static class FieldProviderImpl implements QueryToBodyConverterInterceptor.iFieldProvider {
 
         private final String ANDROID_ID;
         private final InterceptorModule.iPublicKeyProvider keyProvider;
         private final SimpleDateFormat sdf;
         private final QueryToBodyConverterInterceptor.iSubjectProvider subjectProvider;
 
+        @SuppressLint("HardwareIds")
         public FieldProviderImpl(Context context,
                                  InterceptorModule.iPublicKeyProvider keyProvider,
                                  SimpleDateFormat sdf,

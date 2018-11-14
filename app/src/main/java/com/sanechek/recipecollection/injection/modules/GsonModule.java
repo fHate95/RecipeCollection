@@ -16,6 +16,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
+/* provide gson */
 @Module
 public class GsonModule {
 

@@ -16,12 +16,14 @@
         android:id="@+id/iv_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:src="@drawable/img_pork"
         android:scaleType="centerCrop"/>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/cl_item"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorGreyAlpha">
 
         <TextView
             android:id="@+id/tv_name"

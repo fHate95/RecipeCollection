@@ -12,17 +12,17 @@ import android.widget.LinearLayout;
 
 import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.adapter.DishTypesAdapter;
-import com.sanechek.recipecollection.api.utils.KeyProvider;
+import com.sanechek.recipecollection.util.KeyProvider;
 import com.sanechek.recipecollection.data.DishType;
 import com.sanechek.recipecollection.ui.activity.ActivityListener;
 import com.sanechek.recipecollection.ui.activity.DishActivity;
-import com.sanechek.recipecollection.util.DisposableManager;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import io.realm.Realm;
 
+/* Главный фрагмент (экран выбора типа блюд) */
 public class MainFragment extends BaseFragment implements ActivityListener {
 
     @BindView(R.id.rv_dish_types) RecyclerView rvDishTypes;
@@ -42,23 +42,24 @@ public class MainFragment extends BaseFragment implements ActivityListener {
 
         realm = Realm.getDefaultInstance();
 
+        /* Инициализация основных типов блюд */
         ArrayList<DishType> dishTypes = new ArrayList<>();
-        dishTypes.add(new DishType("Salads", "salad"));
-        dishTypes.add(new DishType("Soups", "soup"));
-        dishTypes.add(new DishType("Desserts", "dessert"));
-        dishTypes.add(new DishType("Chicken", "chicken"));
-        dishTypes.add(new DishType("Fish", "fish"));
-        dishTypes.add(new DishType("Beef", "beef"));
-        dishTypes.add(new DishType("Pork", "pork"));
+        dishTypes.add(new DishType("Salads", "salad", R.drawable.img_salad));
+        dishTypes.add(new DishType("Soups", "soup", R.drawable.img_soup));
+        dishTypes.add(new DishType("Desserts", "dessert", R.drawable.img_dessert));
+        dishTypes.add(new DishType("Chicken", "chicken", R.drawable.img_pork));
+        dishTypes.add(new DishType("Fish", "fish", R.drawable.img_pork));
+        dishTypes.add(new DishType("Beef", "beef", R.drawable.img_pork));
+        dishTypes.add(new DishType("Pork", "pork", R.drawable.img_pork));
 
         setRecyclerView(requireContext(), dishTypes);
     }
 
-    /* Setup RecyclerView with dish data */
+    /* Настройка списка */
     private void setRecyclerView(final Context context, final ArrayList<DishType> list) {
         adapter = new DishTypesAdapter(context, list, new DishTypesAdapter.AdapterClickListener() {
             @Override
-            public void onItemClick(DishType item) {
+            public void onItemClick(DishType item) { /* Клик по элементу - открытие списка рецептов */
                 Intent intent = new Intent(requireContext(), DishActivity.class);
                 intent.putExtra(KeyProvider.KEY_SEARCH_QUERY, item.getName());
                 startActivity(intent);

@@ -1,6 +1,6 @@
 package com.sanechek.recipecollection.ui.activity;
 
-/* Callback interface (from activity to fragment) */
+/* Callback interface (Общение фрагментов с активити) */
 public interface ActivityListener {
 
     default void onReadStoragePermissionGranted() {}

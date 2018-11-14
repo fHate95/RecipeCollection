@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.sanechek.recipecollection.injection.AppComponent;
 
+/* Базовая активити, провайдит получение компонента приложения */
 public class BaseActivity extends AppCompatActivity {
 
     @Override

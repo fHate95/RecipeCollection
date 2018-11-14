@@ -22,6 +22,7 @@ import com.sanechek.recipecollection.ui.fragment.MainFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/* Главная активити приложения */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FragmentListener {
 
     @BindView(R.id.nav_view) NavigationView navView;

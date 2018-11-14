@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.data.DishType;
 
@@ -71,6 +72,10 @@ public class DishTypesAdapter extends RecyclerView.Adapter<DishTypesAdapter.View
 
         void bindItems(DishType item) {
             tvName.setText(item.getName());
+
+            Glide.with(context)
+                    .load(item.getImageId())
+                    .into(ivBackground);
         }
 
         @Override

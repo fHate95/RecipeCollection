@@ -1,6 +1,6 @@
 package com.sanechek.recipecollection.ui.fragment;
 
-/* Callback interface (from fragment to activity) */
+/* Интерфейс общения фрагмента с активити */
 public interface FragmentListener {
 
     default void showHideFab() {}

@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
+/* provide repo */
 @Module
 public class RepositoryModule {
 

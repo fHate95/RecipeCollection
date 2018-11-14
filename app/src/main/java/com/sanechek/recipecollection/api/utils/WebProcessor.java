@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 
+/* Реализует интерфейс iProcessor */
 public class WebProcessor implements iProcessor {
 
     private final Gson gson;

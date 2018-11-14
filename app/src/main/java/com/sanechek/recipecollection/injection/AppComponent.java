@@ -22,16 +22,17 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 
+/* Модули для dagger injection */
 @Component(modules = {
-        AppModule.class,
-        RetrofitModule.class,
-        InterceptorModule.class,
-        GsonModule.class,
-        LoggerModule.class,
-        LogInterceptorModule.class,
-        ApiModule.class,
-        RepositoryModule.class,
-        FieldProviderModule.class
+        AppModule.class,            //Модуль приложения
+        RetrofitModule.class,       //Модуль Retrofit
+        InterceptorModule.class,    //Модуль интерсепторов (OkHttp)
+        GsonModule.class,           //Модуль GSON
+        LoggerModule.class,         //Модуль логгера
+        LogInterceptorModule.class, //Модуль интерсепотра логгера
+        ApiModule.class,            //Модуль Api
+        RepositoryModule.class,     //Модуль репозитория
+        FieldProviderModule.class   //Модуль интерсептора для переноса аргументов в тело запроса
 })
 
 @Singleton

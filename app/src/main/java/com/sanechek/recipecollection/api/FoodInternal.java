@@ -10,6 +10,8 @@ import retrofit2.http.Query;
 
 import static com.sanechek.recipecollection.api.FoodApi.*;
 
+/* Внутренний интерфейс API - делагат выполняет запрос отсюда
+* В ответе получаем Single ответа сервера (Reactive) */
 public interface FoodInternal {
 
     @CheckResult

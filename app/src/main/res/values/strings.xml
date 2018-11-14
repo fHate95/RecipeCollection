@@ -9,5 +9,7 @@
     <!--RecipeDetail-->
     <string name="source">Source</string>
     <string name="recipe">Recipe:</string>
+    <string name="ingredients">Ingredients:</string>
+    <string name="more">More</string>
 
 </resources>

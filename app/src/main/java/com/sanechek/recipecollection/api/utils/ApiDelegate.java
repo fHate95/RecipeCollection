@@ -6,10 +6,8 @@ import com.sanechek.recipecollection.api.data.search.Hits;
 
 import io.reactivex.Single;
 
-/**
- * Api delegate. Can wrap some requests into request object if needed.
- * Need for Retrofit, it's realizes all api interface methods.
- */
+/* Делегат для апи. Оборачивет поля для некоторых запросов в объект. (На данном этапе обёртка не используется)
+ * Требуется для Retrofit, т.к. он реализует все методы интерфейса, включая дефолтные. */
 public class ApiDelegate implements FoodApi {
 
     private static final String TAG = "ApiDelegate";

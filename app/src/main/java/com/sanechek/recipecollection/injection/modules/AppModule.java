@@ -20,6 +20,7 @@ import dagger.Provides;
 
 import static com.sanechek.recipecollection.injection.modules.RetrofitModule.CONNECTION_URL;
 
+/* AppModule провайдит Application */
 @Module
 public class AppModule {
 

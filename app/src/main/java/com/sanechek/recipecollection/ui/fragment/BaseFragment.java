@@ -16,16 +16,18 @@ import com.sanechek.recipecollection.injection.AppComponent;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/* Provides callback interface and ButterKnife view binding for all fragments */
+/* Абстрактный класс фрагмента
+ * Провайдит интерфейс Fragment Listener, биндит view через ButterKnife для каждого фрагмента */
 public abstract class BaseFragment extends Fragment {
 
     public FragmentListener callback;
 
-    /* Reference to layout id */
+    /* Передаём layout id */
     @LayoutRes
     protected abstract int getLayoutId();
     private Unbinder unbinder;
 
+    /* Регистрируем callback */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -46,12 +48,14 @@ public abstract class BaseFragment extends Fragment {
         return view;
     }
 
+    /* Производим unbind butterknife */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
 
+    /* Получаем appComponent */
     static AppComponent getAppComponent(Context context) {
         if (context instanceof App) {
             return ((App)context).getAppComponent();

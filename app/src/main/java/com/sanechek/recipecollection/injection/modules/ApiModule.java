@@ -11,6 +11,7 @@ import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
 
+/* Api модуль. Провайдит FoodApi интерфейс  */
 @Module
 public class ApiModule {
 
