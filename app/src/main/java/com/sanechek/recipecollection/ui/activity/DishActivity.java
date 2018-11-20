@@ -1,9 +1,5 @@
 package com.sanechek.recipecollection.ui.activity;
 
-import android.app.ProgressDialog;
-import android.arch.lifecycle.Observer;
-import android.arch.paging.PagedList;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,28 +9,21 @@ import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sanechek.recipecollection.BaseActivity;
-import com.sanechek.recipecollection.BuildConfig;
 import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.adapter.PagingAdapter;
-import com.sanechek.recipecollection.adapter.RecipeAdapter;
 import com.sanechek.recipecollection.api.data.search.Hit;
+import com.sanechek.recipecollection.dialogs.LoadingDialog;
 import com.sanechek.recipecollection.util.KeyProvider;
 import com.sanechek.recipecollection.injection.AppComponent;
 import com.sanechek.recipecollection.paging.RecipeViewModel;
-import com.sanechek.recipecollection.util.DisposableManager;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import io.realm.Realm;
 
 /* Экран со списком рецептов по запросу */
 public class DishActivity extends BaseActivity {
@@ -51,6 +40,8 @@ public class DishActivity extends BaseActivity {
     private PagingAdapter pagingAdapter;
     private RecipeViewModel viewModel;
 
+    private LoadingDialog loadingDialog;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +49,7 @@ public class DishActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         appComponent = getAppComponent(this);
+        loadingDialog = new LoadingDialog(this);
 
         /* Получаем query text из Intent */
         if (getIntent() != null) {
@@ -86,7 +78,22 @@ public class DishActivity extends BaseActivity {
             }
         });
 
-        viewModel = new RecipeViewModel(DishActivity.this, this, appComponent, searchQuery);
+        viewModel = new RecipeViewModel(DishActivity.this, this, appComponent, searchQuery, new RecipeViewModel.CallbackInterface() {
+            @Override
+            public void onDataLoaded(int size) {
+                loadingDialog.dismiss();
+            }
+
+            @Override
+            public void onLoadError() {
+                loadingDialog.dismiss();
+            }
+
+            @Override
+            public void onLoadErrorOkPressed() {
+                onBackPressed();
+            }
+        });
 
         viewModel.getUiList().observe(this, hits -> {
             pagingAdapter.submitList(hits);
@@ -99,6 +106,7 @@ public class DishActivity extends BaseActivity {
         rvRecipes.setLayoutManager(new LinearLayoutManager(this, LinearLayout.VERTICAL, false));
         rvRecipes.setAdapter(pagingAdapter);
 
+        loadingDialog.show();
         viewModel.refresh();
 
         /* Обновление списка по активации SwipeRefreshLayout */

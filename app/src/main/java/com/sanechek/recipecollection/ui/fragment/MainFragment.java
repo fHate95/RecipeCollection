@@ -5,13 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.adapter.DishTypesAdapter;
+import com.sanechek.recipecollection.dialogs.LoadingDialog;
 import com.sanechek.recipecollection.util.KeyProvider;
 import com.sanechek.recipecollection.data.DishType;
 import com.sanechek.recipecollection.ui.activity.ActivityListener;
@@ -47,9 +50,9 @@ public class MainFragment extends BaseFragment implements ActivityListener {
         dishTypes.add(new DishType("Salads", "salad", R.drawable.img_salad));
         dishTypes.add(new DishType("Soups", "soup", R.drawable.img_soup));
         dishTypes.add(new DishType("Desserts", "dessert", R.drawable.img_dessert));
-        dishTypes.add(new DishType("Chicken", "chicken", R.drawable.img_pork));
-        dishTypes.add(new DishType("Fish", "fish", R.drawable.img_pork));
-        dishTypes.add(new DishType("Beef", "beef", R.drawable.img_pork));
+        dishTypes.add(new DishType("Chicken", "chicken", R.drawable.img_chicken));
+        dishTypes.add(new DishType("Fish", "fish", R.drawable.img_fish));
+        dishTypes.add(new DishType("Beef", "beef", R.drawable.img_beef));
         dishTypes.add(new DishType("Pork", "pork", R.drawable.img_pork));
 
         setRecyclerView(requireContext(), dishTypes);

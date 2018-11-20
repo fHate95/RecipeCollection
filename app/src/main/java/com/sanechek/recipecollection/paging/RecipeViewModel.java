@@ -17,17 +17,24 @@ public class RecipeViewModel extends ViewModel {
 
     private RecipeDataSourceFactory factory;
 
-    public RecipeViewModel(Context context, LifecycleOwner owner, AppComponent appComponent, String searchQuery) {
-        factory = new RecipeDataSourceFactory(context, owner, appComponent, searchQuery);
+    private CallbackInterface callbackInterface;
+    public interface CallbackInterface {
+        void onDataLoaded(int size);
+        void onLoadError();
+        void onLoadErrorOkPressed();
     }
 
-    MediatorLiveData<PagedList<Hit>> uiList = new MediatorLiveData<PagedList<Hit>>();
-    LiveData<PagedList<Hit>> pagedList;
+    public RecipeViewModel(Context context, LifecycleOwner owner, AppComponent appComponent, String searchQuery, CallbackInterface callbackInterface) {
+        factory = new RecipeDataSourceFactory(context, owner, appComponent, searchQuery, callbackInterface);
+    }
+
+    private MediatorLiveData<PagedList<Hit>> uiList = new MediatorLiveData<PagedList<Hit>>();
+    private LiveData<PagedList<Hit>> pagedList;
 
     private PagedList.Config config = new PagedList.Config.Builder()
             .setEnablePlaceholders(false)
-            .setPageSize(10)
-            .setInitialLoadSizeHint(10)
+            .setPageSize(15)
+            .setInitialLoadSizeHint(15)
             .build();
 
     public void refresh() {

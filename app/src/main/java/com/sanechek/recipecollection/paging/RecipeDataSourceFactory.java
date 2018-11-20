@@ -15,17 +15,19 @@ public class RecipeDataSourceFactory extends DataSource.Factory<Integer, Hit> {
     private LifecycleOwner owner;
     private AppComponent appComponent;
     private String searchQuery;
+    private RecipeViewModel.CallbackInterface callbackInterface;
 
-    public RecipeDataSourceFactory(Context context, LifecycleOwner owner, AppComponent appComponent, String searchQuery) {
+    public RecipeDataSourceFactory(Context context, LifecycleOwner owner, AppComponent appComponent, String searchQuery, RecipeViewModel.CallbackInterface callbackInterface) {
         this.context = context;
         this.owner = owner;
         this.appComponent = appComponent;
         this.searchQuery = searchQuery;
+        this.callbackInterface = callbackInterface;
     }
 
     @Override
     public DataSource<Integer, Hit> create() {
-        dataSource = new RecipeDataSource(context, owner, appComponent, searchQuery);
+        dataSource = new RecipeDataSource(context, owner, appComponent, searchQuery, callbackInterface);
         return dataSource;
     }
 

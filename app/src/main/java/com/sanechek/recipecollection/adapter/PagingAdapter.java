@@ -25,7 +25,7 @@ public class PagingAdapter extends PagedListAdapter<Hit, PagingAdapter.ViewHolde
     private Context context;
     private LayoutInflater inflater;
 
-    AdapterClickListener clickListener;
+    private AdapterClickListener clickListener;
     public interface AdapterClickListener {
         void onItemClick(Hit item);
     }

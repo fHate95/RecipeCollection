@@ -8,9 +8,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.sanechek.recipecollection.BuildConfig;
+import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.api.data.search.Hit;
+import com.sanechek.recipecollection.dialogs.CustomDialog;
 import com.sanechek.recipecollection.injection.AppComponent;
 import com.sanechek.recipecollection.util.DisposableManager;
+import com.sanechek.recipecollection.util.KeyProvider;
+import com.sanechek.recipecollection.util.Utils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -26,12 +30,14 @@ public class RecipeDataSource extends PositionalDataSource<Hit> {
     private AppComponent appComponent;
     private Context context;
     private String searchQuery;
+    private RecipeViewModel.CallbackInterface callbackInterface;
 
-    public RecipeDataSource(Context context, LifecycleOwner owner, AppComponent appComponent, String searchQuery) {
+    public RecipeDataSource(Context context, LifecycleOwner owner, AppComponent appComponent, String searchQuery, RecipeViewModel.CallbackInterface callbackInterface) {
         this.appComponent = appComponent;
         this.searchQuery = searchQuery;
         this.context = context;
         this.dManager = new DisposableManager(owner);
+        this.callbackInterface = callbackInterface;
     }
 
     /* Начальная загрузка данных */
@@ -41,16 +47,31 @@ public class RecipeDataSource extends PositionalDataSource<Hit> {
                 ", requestedLoadSize = " + params.requestedLoadSize);
 
         /* Запрос к API - Поиск рецептов */
-        Disposable search = appComponent.getApi().search(searchQuery, 0, 10, BuildConfig.APP_ID, BuildConfig.APP_KEY)
+        Disposable search = appComponent.getApi().search(searchQuery, 0, params.requestedLoadSize)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(throwable -> {
-                    if (throwable.getMessage().contains("HTTP 401")) {
-                        Toast.makeText(context, "Error: Request limit exceeded." + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    Utils.log(TAG, "Request error: " + throwable.getMessage());
+                    callbackInterface.onLoadError();
+                    if (throwable.getMessage().contains(KeyProvider.ERR_REQUEST_LIMIT)) {
+                        CustomDialog.builder(context)
+                                .setTitle(R.string.text_error)
+                                .setMessage(R.string.error_request_limit)
+                                .setShowOnlyOkBtn(true)
+                                .setOnYesBtnClickListener(() -> callbackInterface.onLoadErrorOkPressed())
+                                .show();
+                    } else {
+                        CustomDialog.builder(context)
+                                .setTitle(R.string.text_error)
+                                .setMessage(R.string.error_unknown)
+                                .setShowOnlyOkBtn(true)
+                                .setOnYesBtnClickListener(() -> callbackInterface.onLoadErrorOkPressed())
+                                .show();
                     }
                 })
                 .subscribe(((hits, throwable) -> {
                     if (hits != null) {
+                        callbackInterface.onDataLoaded(hits.getHits().size());
                         callback.onResult(hits.getHits(), 0);
                     }
                 }));
@@ -65,19 +86,19 @@ public class RecipeDataSource extends PositionalDataSource<Hit> {
         Log.d(TAG, "loadRange, startPosition = " + params.startPosition + ", loadSize = " + params.loadSize);
 
         /* Запрос к API - Поиск рецептов */
-        Disposable search = appComponent.getApi().search(searchQuery, params.startPosition, params.startPosition + params.loadSize, BuildConfig.APP_ID, BuildConfig.APP_KEY)
+        Disposable search = appComponent.getApi().search(searchQuery, params.startPosition, params.startPosition + params.loadSize)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(throwable -> {
-                    if (throwable.getMessage().contains("HTTP 401")) {
-                        Toast.makeText(context, "Error: Request limit exceeded." + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (throwable.getMessage().contains(KeyProvider.ERR_REQUEST_LIMIT)) {
+                        Utils.log(TAG, "Request error: " + throwable.getMessage());
                     }
                 })
                 .subscribe(((hits, throwable) -> {
                     if (hits != null) {
                         callback.onResult(hits.getHits());
                     } else {
-                        Log.v(TAG, "Error occurred: " + throwable.getMessage());
+                        Utils.log(TAG, "Error occurred: " + throwable.getMessage());
                     }
                 }));
         dManager.disposeOnPause(search);
