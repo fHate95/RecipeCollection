@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.sanechek.recipecollection.R;
-import com.sanechek.recipecollection.api.data.search.Hit;
+import com.sanechek.recipecollection.data.Favorite;
 
 import java.util.ArrayList;
 
@@ -20,26 +20,23 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 
-public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
+public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
 
     private LayoutInflater inflater;
-    private ArrayList<Hit> items;
+    private ArrayList<Favorite> items;
 
-    private Realm realm;
     private Context context;
 
     AdapterClickListener clickListener;
     public interface AdapterClickListener {
-        void onItemClick(Hit item);
+        void onItemClick(Favorite item);
     }
 
-    public RecipeAdapter(Context context, ArrayList<Hit> items, AdapterClickListener clickListener,
-                         Realm realm) {
+    public FavoriteAdapter(Context context, ArrayList<Favorite> items, AdapterClickListener clickListener) {
         this.context = context;
         this.items = items;
         this.inflater = LayoutInflater.from(context);
         this.clickListener = clickListener;
-        this.realm = realm;
     }
 
     @NonNull
@@ -67,10 +64,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             itemView.setOnClickListener(this);
         }
 
-        void bindItems(Hit item) {
-            tvName.setText(item.getRecipe().getLabel());
+        void bindItems(Favorite item) {
+            tvName.setText(item.getLabel());
             Glide.with(context)
-                    .load(item.getRecipe().getImage())
+                    .load(item.getImage())
                     .into(ivPhoto);
         }
 
@@ -89,21 +86,21 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         return items.size();
     }
 
-    public ArrayList<Hit> getItems() {
+    public ArrayList<Favorite> getItems() {
         return items;
     }
 
-    public Hit getItem(int position) {
+    public Favorite getItem(int position) {
         return items.get(position);
     }
 
-    public void refresh(ArrayList<Hit> itemsToAdd) {
+    public void refresh(ArrayList<Favorite> itemsToAdd) {
         items = new ArrayList<>();
         items.addAll(itemsToAdd);
         notifyDataSetChanged();
     }
 
-    public void addAll(ArrayList<Hit> itemsToAdd) {
+    public void addAll(ArrayList<Favorite> itemsToAdd) {
         items.addAll(itemsToAdd);
         notifyDataSetChanged();
     }

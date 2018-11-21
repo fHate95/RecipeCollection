@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 public class Food implements Parcelable {
 
     @SerializedName("uri")
@@ -28,6 +30,8 @@ public class Food implements Parcelable {
         uri = in.readString();
         label = in.readString();
     }
+
+    public Food() { }
 
     public static final Creator<Food> CREATOR = new Creator<Food>() {
         @Override

@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.sanechek.recipecollection.ui.activity.ActivityListener;
+import com.sanechek.recipecollection.ui.fragment.FavoriteFragment;
 import com.sanechek.recipecollection.ui.fragment.FragmentListener;
 import com.sanechek.recipecollection.ui.fragment.MainFragment;
 
@@ -99,6 +100,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (id) {
             case R.id.nav_main:
                 fragment = new MainFragment();
+                setListener((ActivityListener) fragment);
+                break;
+            case R.id.nav_favorites:
+                fragment = new FavoriteFragment();
                 setListener((ActivityListener) fragment);
                 break;
             case R.id.nav_settings:

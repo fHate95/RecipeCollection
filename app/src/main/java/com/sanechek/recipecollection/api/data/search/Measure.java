@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 public class Measure implements Parcelable {
 
     @SerializedName("uri")
@@ -25,6 +27,8 @@ public class Measure implements Parcelable {
         uri = in.readString();
         label = in.readString();
     }
+
+    public Measure() { }
 
     public static final Creator<Measure> CREATOR = new Creator<Measure>() {
         @Override

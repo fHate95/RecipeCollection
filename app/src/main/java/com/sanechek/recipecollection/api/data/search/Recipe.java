@@ -2,13 +2,23 @@ package com.sanechek.recipecollection.api.data.search;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v7.widget.RecyclerView;
 
 import com.google.gson.annotations.SerializedName;
 import com.sanechek.recipecollection.api.data.BaseResponse;
+import com.sanechek.recipecollection.data.FavoriteParent;
 
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 public class Recipe implements Parcelable {
+
+    /* Primary key id */
+    private static final String FIELD_ID = "uri";
 
     @SerializedName("uri")
     private String uri;
@@ -46,32 +56,8 @@ public class Recipe implements Parcelable {
     @SerializedName("healthLabels")
     private String[] healthLabels;
 
-    protected Recipe(Parcel in) {
-        uri = in.readString();
-        label = in.readString();
-        image = in.readString();
-        source = in.readString();
-        url = in.readString();
-        shareAs = in.readString();
-        yield = in.readInt();
-        calories = in.readFloat();
-        totalWeight = in.readFloat();
-        ingredients = in.createTypedArrayList(Ingredient.CREATOR);
-        dietLabels = in.createStringArray();
-        healthLabels = in.createStringArray();
-    }
-
-    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
-        @Override
-        public Recipe createFromParcel(Parcel in) {
-            return new Recipe(in);
-        }
-
-        @Override
-        public Recipe[] newArray(int size) {
-            return new Recipe[size];
-        }
-    };
+    @SerializedName("ingredientLines")
+    private String[] ingredientLines;
 
     public String getUri() {
         return uri;
@@ -121,6 +107,18 @@ public class Recipe implements Parcelable {
         return healthLabels;
     }
 
+    public String[] getIngredientLines() {
+        return ingredientLines;
+    }
+
+    public static String getFieldId() {
+        return FIELD_ID;
+    }
+
+    public Recipe() { }
+
+    /* Parcelable stuff */
+
     @Override
     public int describeContents() {
         return 0;
@@ -140,7 +138,34 @@ public class Recipe implements Parcelable {
         parcel.writeTypedList(ingredients);
         parcel.writeStringArray(dietLabels);
         parcel.writeStringArray(healthLabels);
+        parcel.writeStringArray(ingredientLines);
     }
 
-    /* Parcelable stuff */
+    protected Recipe(Parcel in) {
+        uri = in.readString();
+        label = in.readString();
+        image = in.readString();
+        source = in.readString();
+        url = in.readString();
+        shareAs = in.readString();
+        yield = in.readInt();
+        calories = in.readFloat();
+        totalWeight = in.readFloat();
+        ingredients = in.createTypedArrayList(Ingredient.CREATOR);
+        dietLabels = in.createStringArray();
+        healthLabels = in.createStringArray();
+        ingredientLines = in.createStringArray();
+    }
+
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
 }

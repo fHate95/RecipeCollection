@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.recyclerview.extensions.AsyncDifferConfig;
 import android.support.v7.util.DiffUtil;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +16,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.api.data.search.Hit;
+import com.sanechek.recipecollection.data.DataHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 
 public class PagingAdapter extends PagedListAdapter<Hit, PagingAdapter.ViewHolder> {
 
@@ -27,7 +30,7 @@ public class PagingAdapter extends PagedListAdapter<Hit, PagingAdapter.ViewHolde
 
     private AdapterClickListener clickListener;
     public interface AdapterClickListener {
-        void onItemClick(Hit item);
+        void onItemClick(Hit item, int position);
     }
 
     public PagingAdapter(@NonNull DiffUtil.ItemCallback<Hit> diffCallback, Context context,
@@ -54,6 +57,7 @@ public class PagingAdapter extends PagedListAdapter<Hit, PagingAdapter.ViewHolde
 
         @BindView(R.id.tv_name) TextView tvName;
         @BindView(R.id.iv_photo) CircleImageView ivPhoto;
+        @BindView(R.id.iv_favorite) AppCompatImageView ivFavorite;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -67,13 +71,16 @@ public class PagingAdapter extends PagedListAdapter<Hit, PagingAdapter.ViewHolde
             Glide.with(context)
                     .load(item.getRecipe().getImage())
                     .into(ivPhoto);
+            if (DataHelper.getFavoriteById(Realm.getDefaultInstance(), item.getRecipe().getUri()) != null) {
+                ivFavorite.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.item_view:
-                    clickListener.onItemClick(getItem(getAdapterPosition()));
+                    clickListener.onItemClick(getItem(getAdapterPosition()), getAdapterPosition());
                     break;
             }
         }

@@ -18,7 +18,6 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <!-- <item name="android:elevation">0dp</item> -->
         <item name="elevation">0dp</item>
         <item name="colorControlNormal">@color/colorBlack</item>
     </style>

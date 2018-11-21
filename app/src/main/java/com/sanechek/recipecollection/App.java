@@ -2,6 +2,7 @@ package com.sanechek.recipecollection;
 
 import android.support.multidex.MultiDexApplication;
 
+import com.sanechek.recipecollection.data.FavoriteParent;
 import com.sanechek.recipecollection.injection.AppComponent;
 import com.sanechek.recipecollection.injection.modules.AppModule;
 import com.sanechek.recipecollection.injection.DaggerAppComponent;
@@ -30,7 +31,7 @@ public class App extends MultiDexApplication {
         /* Инициализация Realm */
         Realm.init(this);
         RealmConfiguration realmConfig = new RealmConfiguration.Builder()
-                //.initialData(realm -> realm.createObject(DataParent.class))
+                .initialData(realm -> realm.createObject(FavoriteParent.class))
                 .deleteRealmIfMigrationNeeded()
                 .build();
         //Realm.deleteRealm(realmConfig); // Delete Realm between app restarts.

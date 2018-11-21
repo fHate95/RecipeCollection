@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -64,10 +65,14 @@ public class MainFragment extends BaseFragment implements ActivityListener {
             @Override
             public void onItemClick(DishType item) { /* Клик по элементу - открытие списка рецептов */
                 Intent intent = new Intent(requireContext(), DishActivity.class);
-                intent.putExtra(KeyProvider.KEY_SEARCH_QUERY, item.getName());
+                intent.putExtra(KeyProvider.KEY_SEARCH_QUERY, item.getQuery());
+                intent.putExtra("title", item.getName());
                 startActivity(intent);
             }
         }, realm);
+
+        PagerSnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(rvDishTypes);
 
         rvDishTypes.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayout.HORIZONTAL, false));
         rvDishTypes.setAdapter(adapter);

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,8 +16,11 @@ import com.sanechek.recipecollection.BaseActivity;
 import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.api.data.search.Ingredient;
 import com.sanechek.recipecollection.api.data.search.Recipe;
+import com.sanechek.recipecollection.data.DataHelper;
+import com.sanechek.recipecollection.data.Favorite;
 import com.sanechek.recipecollection.util.KeyProvider;
 import com.sanechek.recipecollection.injection.AppComponent;
+import com.sanechek.recipecollection.util.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +28,8 @@ import io.realm.Realm;
 
 /* Экран детализации рецепта */
 public class RecipeDetailActivity extends BaseActivity {
+
+    private final String TAG = "RecipeDetailActivity";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.tv_source) TextView tvSource;
@@ -66,7 +72,16 @@ public class RecipeDetailActivity extends BaseActivity {
 
         /* View ClickListeners */
         ivStar.setOnClickListener(view -> {
-            ivStar.setImageResource(R.drawable.ic_star_picked);
+            if (DataHelper.getFavoriteById(realm, recipe.getUri()) != null) {
+                Utils.log(TAG, "Favorite not found with id " + recipe.getUri());
+                DataHelper.deleteFavorite(realm, recipe.getUri());
+                ivStar.setImageResource(R.drawable.ic_star);
+            } else {
+                Favorite favorite = new Favorite(recipe);
+                DataHelper.addFavorite(realm, favorite);
+                ivStar.setImageResource(R.drawable.ic_star_picked);
+                Utils.log(TAG, "Favorite created with id " + favorite.getUri());
+            }
         });
         tvSource.setOnClickListener(view -> {
             //empty
@@ -99,6 +114,18 @@ public class RecipeDetailActivity extends BaseActivity {
                 }
         }
         tvContent.setText(text.toString());
+        if (DataHelper.getFavoriteById(Realm.getDefaultInstance(), recipe.getUri()) != null) {
+            ivStar.setImageResource(R.drawable.ic_star_picked);
+        }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

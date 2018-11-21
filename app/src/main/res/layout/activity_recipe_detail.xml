@@ -39,6 +39,14 @@
                     app:layout_collapseMode="parallax"
                     android:background="?colorPrimary" />
 
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:fitsSystemWindows="true"
+                    app:layout_collapseMode="parallax"
+                    android:background="@color/colorGreyAlpha" />
+
             </FrameLayout>
 
             <android.support.v7.widget.Toolbar
