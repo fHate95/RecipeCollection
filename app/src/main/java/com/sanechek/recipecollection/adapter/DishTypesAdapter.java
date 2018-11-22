@@ -9,7 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.sanechek.recipecollection.R;
@@ -62,9 +65,9 @@ public class DishTypesAdapter extends RecyclerView.Adapter<DishTypesAdapter.View
         @BindView(R.id.tv_name) TextView tvName;
         @BindView(R.id.iv_background) AppCompatImageView ivBackground;
 
-        ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        ViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
 
             itemView.setOnClickListener(this);
         }

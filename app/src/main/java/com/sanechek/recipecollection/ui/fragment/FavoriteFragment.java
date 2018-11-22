@@ -1,6 +1,7 @@
 package com.sanechek.recipecollection.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,8 @@ import com.sanechek.recipecollection.adapter.FavoriteAdapter;
 import com.sanechek.recipecollection.data.DataHelper;
 import com.sanechek.recipecollection.data.Favorite;
 import com.sanechek.recipecollection.ui.activity.ActivityListener;
+import com.sanechek.recipecollection.ui.activity.RecipeDetailActivity;
+import com.sanechek.recipecollection.util.KeyProvider;
 
 import java.util.ArrayList;
 
@@ -25,6 +28,7 @@ public class FavoriteFragment extends BaseFragment implements ActivityListener {
     @BindView(R.id.rv_favorite) RecyclerView rvFavorite;
 
     private FavoriteAdapter adapter;
+    private boolean isResumed = false;
 
     @Override
     protected int getLayoutId() {
@@ -45,11 +49,22 @@ public class FavoriteFragment extends BaseFragment implements ActivityListener {
         adapter = new FavoriteAdapter(context, list, new FavoriteAdapter.AdapterClickListener() {
             @Override
             public void onItemClick(Favorite item) { /* Клик по элементу - открытие детализации рецепта*/
-
+                Intent intent = new Intent(requireContext(), RecipeDetailActivity.class);
+                intent.putExtra(KeyProvider.KEY_RECIPE, item);
+                startActivity(intent);
             }
         });
 
         rvFavorite.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false));
         rvFavorite.setAdapter(adapter);
+        isResumed = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adapter != null && isResumed) {
+            adapter.refresh(new ArrayList<>(DataHelper.getFavorites(Realm.getDefaultInstance())));
+        }
     }
 }

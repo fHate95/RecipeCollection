@@ -18,6 +18,7 @@ import com.sanechek.recipecollection.BaseActivity;
 import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.adapter.PagingAdapter;
 import com.sanechek.recipecollection.api.data.search.Hit;
+import com.sanechek.recipecollection.data.Favorite;
 import com.sanechek.recipecollection.dialogs.LoadingDialog;
 import com.sanechek.recipecollection.util.KeyProvider;
 import com.sanechek.recipecollection.injection.AppComponent;
@@ -82,12 +83,13 @@ public class DishActivity extends BaseActivity {
             @Override
             public void onItemClick(Hit item, int position) { /* Клик по элементу - детализация рецепта */
                 Intent intent = new Intent(DishActivity.this, RecipeDetailActivity.class);
-                intent.putExtra(KeyProvider.KEY_RECIPE, item.getRecipe());
+                intent.putExtra(KeyProvider.KEY_RECIPE, new Favorite(item.getRecipe()));
+//                intent.putExtra(KeyProvider.KEY_RECIPE, item.getRecipe());
                 startActivity(intent);
                 activeItemPosition = position;
             }
         });
-
+        /* ViewModel рецепта */
         viewModel = new RecipeViewModel(DishActivity.this, this, appComponent, searchQuery, new RecipeViewModel.CallbackInterface() {
             @Override
             public void onDataLoaded(int size) {

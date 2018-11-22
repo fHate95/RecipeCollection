@@ -73,6 +73,8 @@ public class PagingAdapter extends PagedListAdapter<Hit, PagingAdapter.ViewHolde
                     .into(ivPhoto);
             if (DataHelper.getFavoriteById(Realm.getDefaultInstance(), item.getRecipe().getUri()) != null) {
                 ivFavorite.setVisibility(View.VISIBLE);
+            } else {
+                ivFavorite.setVisibility(View.INVISIBLE);
             }
         }
 

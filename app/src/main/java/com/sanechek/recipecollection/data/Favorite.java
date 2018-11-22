@@ -1,5 +1,8 @@
 package com.sanechek.recipecollection.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.sanechek.recipecollection.api.data.search.Recipe;
 import com.sanechek.recipecollection.util.Utils;
 
@@ -10,7 +13,7 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class Favorite extends RealmObject {
+public class Favorite extends RealmObject implements Parcelable {
 
     /* Primary key id */
     private static final String FIELD_ID = "uri";
@@ -48,8 +51,39 @@ public class Favorite extends RealmObject {
         this.healthLabels = new RealmList<>();
         this.healthLabels.addAll(Arrays.asList(recipe.getHealthLabels()));
         this.ingredientLines = new RealmList<>();
-        //this.ingredientLines.addAll(Arrays.asList(recipe.getIngredientLines()));
+        Utils.log("TAG_REALM", "size: " + recipe.getIngredientLines().length);
+        this.ingredientLines.addAll(Arrays.asList(recipe.getIngredientLines()));
     }
+
+    protected Favorite(Parcel in) {
+        uri = in.readString();
+        label = in.readString();
+        image = in.readString();
+        source = in.readString();
+        url = in.readString();
+        shareAs = in.readString();
+        yield = in.readInt();
+        calories = in.readFloat();
+        totalWeight = in.readFloat();
+        this.dietLabels = new RealmList<>();
+        this.dietLabels.addAll(in.createStringArrayList());
+        this.healthLabels = new RealmList<>();
+        this.healthLabels.addAll(in.createStringArrayList());
+        this.ingredientLines = new RealmList<>();
+        this.ingredientLines.addAll(in.createStringArrayList());
+    }
+
+    public static final Creator<Favorite> CREATOR = new Creator<Favorite>() {
+        @Override
+        public Favorite createFromParcel(Parcel in) {
+            return new Favorite(in);
+        }
+
+        @Override
+        public Favorite[] newArray(int size) {
+            return new Favorite[size];
+        }
+    };
 
     public void setUri(String uri) {
         this.uri = uri;
@@ -166,5 +200,29 @@ public class Favorite extends RealmObject {
         if (item != null) {
             item.deleteFromRealm();
         }
+    }
+
+    /* Parcelable stuff */
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(uri);
+        parcel.writeString(label);
+        parcel.writeString(image);
+        parcel.writeString(source);
+        parcel.writeString(url);
+        parcel.writeString(shareAs);
+        parcel.writeInt(yield);
+        parcel.writeFloat(calories);
+        parcel.writeFloat(totalWeight);
+        parcel.writeStringList(dietLabels);
+        parcel.writeStringList(healthLabels);
+        parcel.writeStringList(ingredientLines);
     }
 }

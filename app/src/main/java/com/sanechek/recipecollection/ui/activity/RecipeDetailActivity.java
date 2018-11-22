@@ -41,7 +41,7 @@ public class RecipeDetailActivity extends BaseActivity {
     private Realm realm;
     private AppComponent appComponent;
 
-    private Recipe recipe;
+    private Favorite recipe;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,10 +77,10 @@ public class RecipeDetailActivity extends BaseActivity {
                 DataHelper.deleteFavorite(realm, recipe.getUri());
                 ivStar.setImageResource(R.drawable.ic_star);
             } else {
-                Favorite favorite = new Favorite(recipe);
-                DataHelper.addFavorite(realm, favorite);
-                ivStar.setImageResource(R.drawable.ic_star_picked);
-                Utils.log(TAG, "Favorite created with id " + favorite.getUri());
+                //Favorite favorite = new Favorite(recipe);
+                DataHelper.addFavorite(realm, recipe);
+                ivStar.setImageResource(R.drawable.ic_star_checked);
+                Utils.log(TAG, "Favorite created with id " + recipe.getUri());
             }
         });
         tvSource.setOnClickListener(view -> {
@@ -105,17 +105,17 @@ public class RecipeDetailActivity extends BaseActivity {
         tvSource.setText(recipe.getSource());
         StringBuilder text = new StringBuilder();
         text.append(getString(R.string.ingredients));
-            for (Ingredient ingredient : recipe.getIngredients()) {
+            for (String ingredient : recipe.getIngredientLines()) {
                 try {
                     text.append("\n");
-                    text.append("* ").append(ingredient.getText());
+                    text.append("* ").append(ingredient);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
         }
         tvContent.setText(text.toString());
         if (DataHelper.getFavoriteById(Realm.getDefaultInstance(), recipe.getUri()) != null) {
-            ivStar.setImageResource(R.drawable.ic_star_picked);
+            ivStar.setImageResource(R.drawable.ic_star_checked);
         }
     }
 

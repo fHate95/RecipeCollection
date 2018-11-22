@@ -5,21 +5,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.adapter.DishTypesAdapter;
-import com.sanechek.recipecollection.dialogs.LoadingDialog;
 import com.sanechek.recipecollection.util.KeyProvider;
 import com.sanechek.recipecollection.data.DishType;
 import com.sanechek.recipecollection.ui.activity.ActivityListener;
 import com.sanechek.recipecollection.ui.activity.DishActivity;
+import com.sanechek.recipecollection.view.ZoomLayoutManager;
 
 import java.util.ArrayList;
 
@@ -74,7 +71,7 @@ public class MainFragment extends BaseFragment implements ActivityListener {
         PagerSnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(rvDishTypes);
 
-        rvDishTypes.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayout.HORIZONTAL, false));
+        rvDishTypes.setOverScrollMode(View.OVER_SCROLL_NEVER);
         rvDishTypes.setAdapter(adapter);
     }
 

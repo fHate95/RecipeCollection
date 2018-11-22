@@ -2,6 +2,7 @@ package com.sanechek.recipecollection.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.CheckResult;
 import android.support.annotation.StringRes;
@@ -35,6 +36,7 @@ public class CustomDialog extends Dialog {
     private Action onYesBtnClickCallback;
     private Action onNoBtnClickCallback;
     private Action onCancelClickCallback;
+    private Action onDismissListener;
 
     @CheckResult
     public static Builder builder(Context context) {
@@ -63,6 +65,7 @@ public class CustomDialog extends Dialog {
         private Action onYesBtnClickListener;
         private Action onNoBtnClickListener;
         private Action onCancelClickListener;
+        private Action onDismissListener;
         private boolean closeByClickOutside;
         private boolean showCancelBtn;
         private boolean showOnlyOkBtn;
@@ -123,6 +126,12 @@ public class CustomDialog extends Dialog {
         }
 
         @CheckResult
+        public Builder setOnDismissListener(Action onDismissListener) {
+            this.onDismissListener = onDismissListener;
+            return this;
+        }
+
+        @CheckResult
         public Builder setOnNoBtnClickListener(Action onNoBtnClickListener) {
             this.onNoBtnClickListener = onNoBtnClickListener;
             return this;
@@ -161,6 +170,7 @@ public class CustomDialog extends Dialog {
             dialog.onYesBtnClickCallback = onYesBtnClickListener;
             dialog.onNoBtnClickCallback = onNoBtnClickListener;
             dialog.onCancelClickCallback = onCancelClickListener;
+            dialog.onDismissListener = onDismissListener;
             dialog.closeClickOutside = closeByClickOutside;
             dialog.showCancelBtn = showCancelBtn;
             dialog.showOnlyOkBtn = showOnlyOkBtn;
@@ -218,6 +228,19 @@ public class CustomDialog extends Dialog {
         View v = Objects.requireNonNull(getWindow()).getDecorView();
         v.setBackgroundResource(android.R.color.transparent);
         setCanceledOnTouchOutside(closeClickOutside);
+        setCancelable(false);
+        setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                if (onDismissListener != null) {
+                    try {
+                        onDismissListener.run();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
         tvTitle.setText(topText);
         tvText.setText(bottomText);

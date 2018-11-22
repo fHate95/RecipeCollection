@@ -117,6 +117,13 @@ public class Recipe implements Parcelable {
 
     public Recipe() { }
 
+    public Recipe(String label, String uri, String url, String[] ingredientLines) {
+        this.label = label;
+        this.uri = uri;
+        this.url = url;
+        this.ingredientLines = ingredientLines;
+    }
+
     /* Parcelable stuff */
 
     @Override
