@@ -1,4 +1,4 @@
-package com.sanechek.recipecollection;
+package com.sanechek.recipecollection.ui.activity;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -13,12 +13,18 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.ui.activity.ActivityListener;
 import com.sanechek.recipecollection.ui.fragment.FavoriteFragment;
 import com.sanechek.recipecollection.ui.fragment.FragmentListener;
 import com.sanechek.recipecollection.ui.fragment.MainFragment;
+
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.content_frame) FrameLayout flContent;
+    ImageView ivHeader;
 
     private Fragment currentFragment;
 
@@ -45,15 +52,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        /* Получаем header view */
+        View headerLayout = navView.getHeaderView(0);
+        ivHeader = (ImageView) headerLayout.findViewById(R.id.iv_header);
+
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.app_name, R.string.main);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        /* Set Navigation Item Selected listener for navView
-         * set first item checked */
         navView.setNavigationItemSelectedListener(this);
         navView.getMenu().getItem(0).setChecked(true);
+        setHeaderImage(4);
 
         MainFragment fragment = new MainFragment();
         setListener((ActivityListener) fragment);
@@ -128,5 +138,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /** Установка изображения для NavHeader
+     * @param imagesCount - кол-во предустановленных изображений */
+    private void setHeaderImage(int imagesCount) {
+        Random rand = new Random();
+        int id = rand.nextInt(imagesCount) + 1;
+        int resId = getResources().getIdentifier("nav_header_" + String.valueOf(id), "drawable", getPackageName());
+        ivHeader.setImageResource(resId);
     }
 }

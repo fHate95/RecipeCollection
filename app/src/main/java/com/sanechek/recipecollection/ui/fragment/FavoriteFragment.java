@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
 import com.sanechek.recipecollection.R;
@@ -55,8 +57,12 @@ public class FavoriteFragment extends BaseFragment implements ActivityListener {
             }
         });
 
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(rvFavorite.getContext(), R.anim.rv_layout_animation_slide);
         rvFavorite.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false));
         rvFavorite.setAdapter(adapter);
+        rvFavorite.setLayoutAnimation(controller);
+        rvFavorite.scheduleLayoutAnimation();
         isResumed = true;
     }
 

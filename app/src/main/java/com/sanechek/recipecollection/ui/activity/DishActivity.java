@@ -11,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -94,6 +96,7 @@ public class DishActivity extends BaseActivity {
             @Override
             public void onDataLoaded(int size) {
                 loadingDialog.dismiss();
+                rvRecipes.scheduleLayoutAnimation();
             }
 
             @Override
@@ -111,10 +114,10 @@ public class DishActivity extends BaseActivity {
             pagingAdapter.submitList(hits);
         });
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvRecipes.getContext(),
-                LinearLayout.VERTICAL);
-        rvRecipes.addItemDecoration(dividerItemDecoration);
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(rvRecipes.getContext(), R.anim.rv_layout_animation_from_bottom);
         rvRecipes.setLayoutManager(new LinearLayoutManager(this, LinearLayout.VERTICAL, false));
+        rvRecipes.setLayoutAnimation(controller);
         rvRecipes.setAdapter(pagingAdapter);
 
         loadingDialog.show();
