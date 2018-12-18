@@ -23,6 +23,7 @@ import com.sanechek.recipecollection.ui.activity.ActivityListener;
 import com.sanechek.recipecollection.ui.fragment.FavoriteFragment;
 import com.sanechek.recipecollection.ui.fragment.FragmentListener;
 import com.sanechek.recipecollection.ui.fragment.MainFragment;
+import com.sanechek.recipecollection.ui.fragment.SearchDetailFragment;
 
 import java.util.Random;
 
@@ -114,6 +115,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_favorites:
                 fragment = new FavoriteFragment();
+                setListener((ActivityListener) fragment);
+                break;
+            case R.id.nav_search:
+                fragment = new SearchDetailFragment();
                 setListener((ActivityListener) fragment);
                 break;
             case R.id.nav_settings:

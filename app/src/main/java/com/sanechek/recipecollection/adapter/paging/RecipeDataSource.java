@@ -1,13 +1,11 @@
-package com.sanechek.recipecollection.paging;
+package com.sanechek.recipecollection.adapter.paging;
 
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.paging.PositionalDataSource;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.sanechek.recipecollection.BuildConfig;
 import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.api.data.search.Hit;
 import com.sanechek.recipecollection.dialogs.CustomDialog;

@@ -14,4 +14,7 @@ public class KeyProvider {
     public static final String KEY_INGREDIENTS = "ingredients";
 
     public static final String ERR_REQUEST_LIMIT = "HTTP 401";
+
+    public static final String KEY_NONE = "None";
+
 }

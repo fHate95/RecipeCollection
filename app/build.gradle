@@ -26,7 +26,6 @@ android {
             buildConfigField "String", APP_ID, '"7cfe5eaf"'
             buildConfigField "String", APP_KEY, '"09559bf5aff345f1554818084d1b9f5c"'
             buildConfigField "String", SERVER_URL, '"https://api.edamam.com"'
-//            buildConfigField "String", SERVER_URL, '"https://kudago.com"'
             buildConfigField "String", APP_VERSION, '"1.0"'
         }
         debug {
@@ -34,7 +33,6 @@ android {
             buildConfigField "String", APP_ID, '"7cfe5eaf"'
             buildConfigField "String", APP_KEY, '"09559bf5aff345f1554818084d1b9f5c"'
             buildConfigField "String", SERVER_URL, '"https://api.edamam.com"'
-//            buildConfigField "String", SERVER_URL, '"https://kudago.com"'
             buildConfigField "String", APP_VERSION, '"1.0"'
         }
     }
@@ -61,6 +59,7 @@ dependencies {
     api 'com.sothree.slidinguppanel:library:3.4.0'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'io.saeid:fab-loading:1.0.0'
+    implementation 'io.apptik.widget:multislider-holo:1.3'
 
     /* RxJava | Dagger */
     api 'io.reactivex.rxjava2:rxjava:2.1.14'

@@ -6,4 +6,7 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="widget_margin">0dp</dimen>
+
+    <dimen name="input_label_vertical_spacing">8dp</dimen>
+    <dimen name="input_label_horizontal_spacing">4dp</dimen>
 </resources>

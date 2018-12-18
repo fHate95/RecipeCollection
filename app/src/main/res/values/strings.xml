@@ -4,14 +4,24 @@
     <string name="main">Main</string>
     <string name="tools">Tools</string>
     <string name="favorites">Favorites</string>
+    <string name="search">Search</string>
     <string name="settings">Settings</string>
     <string name="share">Share</string>
+
+    <string name="kcal">kcal</string>
 
     <!--RecipeDetail-->
     <string name="source">Source</string>
     <string name="recipe">Recipe:</string>
     <string name="ingredients">Ingredients:</string>
     <string name="more">More</string>
+    
+    <!--Detail search-->
+    <string name="diet_label">Diet label</string>
+    <string name="health_label">Health label</string>
+    <string name="ingr_label">Maximum number of ingredients</string>
+    <string name="cal_label">Kcal per serving</string>
+    <string name="hint_query">Search query</string>
 
     <!--CustomDialog-->
     <string name="text_yes">Yes</string>
@@ -24,5 +34,24 @@
     <!--Error messages-->
     <string name="error_request_limit">Request limit exceeded</string>
     <string name="error_unknown">Unknown error</string>
+    
+    <!--Diet labels-->
+    <string-array name="diet_labels" >
+        <item>None</item>
+        <item>Balanced</item>
+        <item>High protein</item>
+        <item>High fiber</item>
+        <item>Low fat</item>
+        <item>Low sodium</item>
+    </string-array>
+
+    <!--Health labels-->
+    <string-array name="health_labels" >
+        <item>None</item>
+        <item>Tree nut free</item>
+        <item>Peanut free</item>
+        <item>Vegetarian</item>
+        <item>Vegan</item>
+    </string-array>
 
 </resources>

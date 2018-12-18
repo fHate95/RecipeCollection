@@ -1,4 +1,4 @@
-package com.sanechek.recipecollection.paging;
+package com.sanechek.recipecollection.adapter.paging;
 
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.paging.DataSource;

@@ -1,5 +1,7 @@
 package com.sanechek.recipecollection.api.utils;
 
+import android.support.annotation.Nullable;
+
 import com.sanechek.recipecollection.BuildConfig;
 import com.sanechek.recipecollection.api.FoodApi;
 import com.sanechek.recipecollection.api.FoodInternal;
@@ -26,5 +28,10 @@ public class ApiDelegate implements FoodApi {
         + ", to = " + to + ", app_id = " + BuildConfig.APP_ID + ", app_key = " + BuildConfig.APP_KEY);
 
         return internal.search(query, from, to, BuildConfig.APP_ID, BuildConfig.APP_KEY);
+    }
+
+    @Override
+    public Single<Hits> search(String query, int from, int to, int ingr, @Nullable String diet, @Nullable String health, String calories) {
+        return internal.search(query, from, to, ingr, diet, health, calories, BuildConfig.APP_ID, BuildConfig.APP_KEY);
     }
 }
