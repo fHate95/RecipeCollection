@@ -18,20 +18,20 @@
             android:title="@string/search" />
     </group>
 
-    <item android:title="@string/tools">
-        <menu>
-            <group android:checkableBehavior="single" >
-                <item
-                    android:id="@+id/nav_settings"
-                    android:icon="@drawable/ic_main"
-                    android:title="@string/settings" />
-            </group>
-        </menu>
-    </item>
+    <!--<item android:title="@string/tools">-->
+        <!--<menu>-->
+            <!--<group android:checkableBehavior="single" >-->
+                <!--<item-->
+                    <!--android:id="@+id/nav_settings"-->
+                    <!--android:icon="@drawable/ic_main"-->
+                    <!--android:title="@string/settings" />-->
+            <!--</group>-->
+        <!--</menu>-->
+    <!--</item>-->
 
     <item
         android:id="@+id/nav_share"
-        android:icon="@drawable/ic_main"
+        android:icon="@android:drawable/ic_menu_share"
         android:title="@string/share" />
 
 </menu>

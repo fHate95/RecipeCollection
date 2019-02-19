@@ -7,15 +7,20 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
-    <io.saeid.fabloading.LoadingView
-        android:id="@+id/loading_view"
+    <ProgressBar
+        android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleX="1.0"
-        android:scaleY="1.0"
-        app:fab_shadow="false"
-        app:mfl_onclickLoading="false"
-        app:mfl_duration="600"
-        app:mfl_repeat="10000" />
+        android:layout_height="wrap_content" />
+
+    <!--<io.saeid.fabloading.LoadingView-->
+        <!--android:id="@+id/loading_view"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:scaleX="1.0"-->
+        <!--android:scaleY="1.0"-->
+        <!--app:fab_shadow="false"-->
+        <!--app:mfl_onclickLoading="false"-->
+        <!--app:mfl_duration="600"-->
+        <!--app:mfl_repeat="10000" />-->
 
 </LinearLayout>

@@ -22,6 +22,7 @@
     <string name="ingr_label">Maximum number of ingredients</string>
     <string name="cal_label">Kcal per serving</string>
     <string name="hint_query">Search query</string>
+    <string name="nothing_found">Nothing found</string>
 
     <!--CustomDialog-->
     <string name="text_yes">Yes</string>

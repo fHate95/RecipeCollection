@@ -121,9 +121,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragment = new SearchDetailFragment();
                 setListener((ActivityListener) fragment);
                 break;
-            case R.id.nav_settings:
-
-                break;
+//            case R.id.nav_settings:
+//
+//                break;
             case R.id.nav_share:
                 final Intent shareAppIntent = new Intent(android.content.Intent.ACTION_SEND);
                 shareAppIntent.setType("plain/text");

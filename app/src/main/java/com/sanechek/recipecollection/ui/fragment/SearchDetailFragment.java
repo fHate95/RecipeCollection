@@ -1,24 +1,35 @@
 package com.sanechek.recipecollection.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sanechek.recipecollection.R;
+import com.sanechek.recipecollection.adapter.RecipeAdapter;
+import com.sanechek.recipecollection.api.data.search.Hit;
+import com.sanechek.recipecollection.data.Favorite;
 import com.sanechek.recipecollection.dialogs.CustomDialog;
 import com.sanechek.recipecollection.injection.AppComponent;
 import com.sanechek.recipecollection.ui.activity.ActivityListener;
+import com.sanechek.recipecollection.ui.activity.DishActivity;
+import com.sanechek.recipecollection.ui.activity.RecipeDetailActivity;
 import com.sanechek.recipecollection.util.KeyProvider;
 import com.sanechek.recipecollection.util.Utils;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -43,8 +54,12 @@ public class SearchDetailFragment extends BaseFragment implements ActivityListen
     @BindView(R.id.tv_cal_count) TextView tvCalCount;
     @BindView(R.id.drag_view) ConstraintLayout dragRootView;
     @BindView(R.id.btn_search) Button btnSearch;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindView(R.id.tv_empty) TextView tvEmpty;
 
     @BindView(R.id.rv_recipes) RecyclerView rvRecipes;
+
+    private RecipeAdapter adapter;
 
     private String diet = "None";
     private String health = "None";
@@ -55,6 +70,8 @@ public class SearchDetailFragment extends BaseFragment implements ActivityListen
     private AppComponent appComponent;
 
     private Disposable search;
+
+    private int activeItemPosition = -1;
 
     @Override
     protected int getLayoutId() {
@@ -68,6 +85,7 @@ public class SearchDetailFragment extends BaseFragment implements ActivityListen
         appComponent = getAppComponent(requireContext());
 
         configureSpinners();
+        setRecyclerView();
         slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
         slidingLayout.setTouchEnabled(false);
 
@@ -115,41 +133,75 @@ public class SearchDetailFragment extends BaseFragment implements ActivityListen
         });
         dragRootView.setOnClickListener(v -> dragRootView.requestFocus());
 
-        btnSearch.setOnClickListener(v -> {
-            search = appComponent.getApi().search(etQuery.getText().toString(), 0, 30, ingrCount,
-                    spinnerDiet.getSelectedItem().toString().equals(KeyProvider.KEY_NONE) ? null :
-                            spinnerDiet.getSelectedItem().toString().toLowerCase().replace(" ", "-"),
-                    spinnerHealth.getSelectedItem().toString().equals(KeyProvider.KEY_NONE) ? null :
-                            spinnerHealth.getSelectedItem().toString().toLowerCase().replace(" ", "-"),
-                    String.valueOf(thumbValue1) + "-" + String.valueOf(thumbValue2))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                        Utils.log(TAG, "Request error: " + throwable.getMessage());
-                        if (throwable.getMessage().contains(KeyProvider.ERR_REQUEST_LIMIT)) {
-                            CustomDialog.builder(requireContext())
-                                    .setTitle(R.string.text_error)
-                                    .setMessage(R.string.error_request_limit)
-                                    .setShowOnlyOkBtn(true)
-                                    .setOnYesBtnClickListener(() -> {})
-                                    .show();
+        btnSearch.setOnClickListener(v -> getRecipes());
+    }
+
+    private void getRecipes() {
+        progressBar.setVisibility(View.VISIBLE);
+        tvEmpty.setVisibility(View.GONE);
+        slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+
+        search = appComponent.getApi().search(etQuery.getText().toString(), 0, 30, ingrCount,
+                spinnerDiet.getSelectedItem().toString().equals(KeyProvider.KEY_NONE) ? null :
+                        spinnerDiet.getSelectedItem().toString().toLowerCase().replace(" ", "-"),
+                spinnerHealth.getSelectedItem().toString().equals(KeyProvider.KEY_NONE) ? null :
+                        spinnerHealth.getSelectedItem().toString().toLowerCase().replace(" ", "-"),
+                String.valueOf(thumbValue1) + "-" + String.valueOf(thumbValue2))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(throwable -> {
+                    progressBar.setVisibility(View.GONE);
+                    Utils.log(TAG, "Request error: " + throwable.getMessage());
+                    if (throwable.getMessage().contains(KeyProvider.ERR_REQUEST_LIMIT)) {
+                        CustomDialog.builder(requireContext())
+                                .setTitle(R.string.text_error)
+                                .setMessage(R.string.error_request_limit)
+                                .setShowOnlyOkBtn(true)
+                                .setOnYesBtnClickListener(() -> slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED))
+                                .show();
+                    } else {
+                        CustomDialog.builder(requireContext())
+                                .setTitle(R.string.text_error)
+                                .setMessage(R.string.error_unknown)
+                                .setShowOnlyOkBtn(true)
+                                .setOnYesBtnClickListener(() -> slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED))
+                                .show();
+                    }
+                })
+                .subscribe(((hits, throwable) -> {
+                    if (hits != null) {
+                        if (!hits.getHits().isEmpty()) {
+                            progressBar.setVisibility(View.GONE);
+                            adapter.updateItems(hits.getHits());
                         } else {
-                            CustomDialog.builder(requireContext())
-                                    .setTitle(R.string.text_error)
-                                    .setMessage(R.string.error_unknown)
-                                    .setShowOnlyOkBtn(true)
-                                    .setOnYesBtnClickListener(() -> {})
-                                    .show();
+                            progressBar.setVisibility(View.GONE);
+                            tvEmpty.setVisibility(View.VISIBLE);
                         }
-                    })
-                    .subscribe(((hits, throwable) -> {
-                        if (hits != null) {
-                            if (!hits.getHits().isEmpty()) {
-                                slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                            }
-                        }
-                    }));
+                    }
+                }));
+    }
+
+    @Override
+    public void onResume() {
+        if (adapter != null && activeItemPosition != -1) {
+            adapter.notifyItemChanged(activeItemPosition);
+        }
+        super.onResume();
+    }
+
+    private void setRecyclerView() {
+        adapter = new RecipeAdapter(requireContext(), new RecipeAdapter.AdapterClickListener() {
+            @Override
+            public void onItemClick(Hit item, int position) {
+                Intent intent = new Intent(requireContext(), RecipeDetailActivity.class);
+                intent.putExtra(KeyProvider.KEY_RECIPE, new Favorite(item.getRecipe()));
+                startActivity(intent);
+                activeItemPosition = position;
+            }
         });
+
+        rvRecipes.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayout.VERTICAL, false));
+        rvRecipes.setAdapter(adapter);
     }
 
     private void configureSpinners() {
