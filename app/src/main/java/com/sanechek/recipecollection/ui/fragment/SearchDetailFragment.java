@@ -8,8 +8,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,7 +26,6 @@ import com.sanechek.recipecollection.data.Favorite;
 import com.sanechek.recipecollection.dialogs.CustomDialog;
 import com.sanechek.recipecollection.injection.AppComponent;
 import com.sanechek.recipecollection.ui.activity.ActivityListener;
-import com.sanechek.recipecollection.ui.activity.DishActivity;
 import com.sanechek.recipecollection.ui.activity.RecipeDetailActivity;
 import com.sanechek.recipecollection.util.KeyProvider;
 import com.sanechek.recipecollection.util.Utils;
@@ -40,6 +37,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+/* Фрагмент поиска рецептов по параметрам */
 public class SearchDetailFragment extends BaseFragment implements ActivityListener {
 
     private final String TAG = "SearchDetailFragment";
@@ -61,8 +59,6 @@ public class SearchDetailFragment extends BaseFragment implements ActivityListen
 
     private RecipeAdapter adapter;
 
-    private String diet = "None";
-    private String health = "None";
     private int ingrCount = 10;
     private int thumbValue1 = 50;
     private int thumbValue2 = 600;
@@ -136,7 +132,9 @@ public class SearchDetailFragment extends BaseFragment implements ActivityListen
         btnSearch.setOnClickListener(v -> getRecipes());
     }
 
+    /* Получение списка рецептов по заданным параметрам */
     private void getRecipes() {
+        callback.setRefreshMenuItemVisibility(false);
         progressBar.setVisibility(View.VISIBLE);
         tvEmpty.setVisibility(View.GONE);
         slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
@@ -164,19 +162,25 @@ public class SearchDetailFragment extends BaseFragment implements ActivityListen
                                 .setTitle(R.string.text_error)
                                 .setMessage(R.string.error_unknown)
                                 .setShowOnlyOkBtn(true)
-                                .setOnYesBtnClickListener(() -> slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED))
+                                .setOnYesBtnClickListener(() -> {
+                                    slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                                    adapter.clearItems();
+                                })
                                 .show();
                     }
                 })
                 .subscribe(((hits, throwable) -> {
+                    progressBar.setVisibility(View.GONE);
+                    callback.setRefreshMenuItemVisibility(true);
                     if (hits != null) {
                         if (!hits.getHits().isEmpty()) {
-                            progressBar.setVisibility(View.GONE);
                             adapter.updateItems(hits.getHits());
+                            tvEmpty.setVisibility(View.GONE);
                         } else {
-                            progressBar.setVisibility(View.GONE);
                             tvEmpty.setVisibility(View.VISIBLE);
                         }
+                    } else {
+                        Toast.makeText(requireContext(), R.string.error_unknown, Toast.LENGTH_SHORT).show();
                     }
                 }));
     }
@@ -189,6 +193,15 @@ public class SearchDetailFragment extends BaseFragment implements ActivityListen
         super.onResume();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (search != null) {
+            search.dispose();
+        }
+    }
+
+    /* Настройка списка */
     private void setRecyclerView() {
         adapter = new RecipeAdapter(requireContext(), new RecipeAdapter.AdapterClickListener() {
             @Override
@@ -204,6 +217,7 @@ public class SearchDetailFragment extends BaseFragment implements ActivityListen
         rvRecipes.setAdapter(adapter);
     }
 
+    /* Настройка спиннеров */
     private void configureSpinners() {
         /* diet spinner */
         ArrayAdapter<CharSequence> dietAdapter = ArrayAdapter.createFromResource(requireContext(),
@@ -237,5 +251,13 @@ public class SearchDetailFragment extends BaseFragment implements ActivityListen
 
             }
         });
+    }
+
+    /* Клик по кнопке в меню - очистка списка и показ панели с параметрами */
+    @Override
+    public void onRefresh() {
+        callback.setRefreshMenuItemVisibility(false);
+        slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+        adapter.clearItems();
     }
 }

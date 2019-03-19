@@ -2,11 +2,11 @@ package com.sanechek.recipecollection.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -22,12 +22,14 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 
+/* Адапет списка рецептов */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
     private LayoutInflater inflater;
     private ArrayList<Hit> items;
     private Context context;
 
+    /* Листенер кликов */
     private AdapterClickListener clickListener;
     public interface AdapterClickListener {
         void onItemClick(Hit item, int position);
@@ -41,8 +43,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -55,11 +55,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         holder.bindItems(items.get(position));
     }
 
+    /* ViewHolder устанавливает view для элемента, имплиментит View.OnClickListener для обработки кликов */
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.tv_name) TextView tvName;
         @BindView(R.id.iv_photo) CircleImageView ivPhoto;
-        @BindView(R.id.iv_favorite) AppCompatImageView ivFavorite;
+        @BindView(R.id.rv_favorite) RelativeLayout ivFavorite;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -69,6 +70,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             itemView.setOnClickListener(this);
         }
 
+        /* Заполнение views */
         private void bindItems(Hit item) {
             tvName.setText(item.getRecipe().getLabel());
             Glide.with(context)
@@ -97,14 +99,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     public int getItemCount() {
         return items.size();
     }
-
-    /* Get item by position */
+    /* Получение элемента по позиции */
     public Hit getItem(int position) {
         return items.get(position);
     }
-
+    /* Обновление списка */
     public void updateItems(List<Hit> items) {
         this.items = new ArrayList<>(items);
+        notifyDataSetChanged();
+    }
+    /* Очистка списка */
+    public void clearItems() {
+        this.items.clear();
         notifyDataSetChanged();
     }
 

@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +24,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 
+/* Пагинируемый адаптер списка */
 public class PagingAdapter extends PagedListAdapter<Hit, PagingAdapter.ViewHolder> {
 
     private Context context;
@@ -57,7 +59,7 @@ public class PagingAdapter extends PagedListAdapter<Hit, PagingAdapter.ViewHolde
 
         @BindView(R.id.tv_name) TextView tvName;
         @BindView(R.id.iv_photo) CircleImageView ivPhoto;
-        @BindView(R.id.iv_favorite) AppCompatImageView ivFavorite;
+        @BindView(R.id.rv_favorite) RelativeLayout ivFavorite;
 
         ViewHolder(View itemView) {
             super(itemView);

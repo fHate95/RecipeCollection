@@ -12,10 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.sanechek.recipecollection.BaseActivity;
 import com.sanechek.recipecollection.R;
-import com.sanechek.recipecollection.api.data.search.Ingredient;
-import com.sanechek.recipecollection.api.data.search.Recipe;
 import com.sanechek.recipecollection.data.DataHelper;
 import com.sanechek.recipecollection.data.Favorite;
 import com.sanechek.recipecollection.util.KeyProvider;

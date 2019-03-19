@@ -48,13 +48,10 @@ public class FavoriteFragment extends BaseFragment implements ActivityListener {
 
     /* Настройка списка */
     private void setRecyclerView(final Context context, final ArrayList<Favorite> list) {
-        adapter = new FavoriteAdapter(context, list, new FavoriteAdapter.AdapterClickListener() {
-            @Override
-            public void onItemClick(Favorite item) { /* Клик по элементу - открытие детализации рецепта*/
-                Intent intent = new Intent(requireContext(), RecipeDetailActivity.class);
-                intent.putExtra(KeyProvider.KEY_RECIPE, item);
-                startActivity(intent);
-            }
+        adapter = new FavoriteAdapter(context, list, item -> { /* Клик по элементу - открытие детализации рецепта*/
+            Intent intent = new Intent(requireContext(), RecipeDetailActivity.class);
+            intent.putExtra(KeyProvider.KEY_RECIPE, item);
+            startActivity(intent);
         });
 
         final LayoutAnimationController controller =

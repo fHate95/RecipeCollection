@@ -2,12 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--<item-->
-        <!--android:id="@+id/action_search"-->
-        <!--android:icon="@android:drawable/ic_menu_search"-->
-        <!--android:iconTint="@color/colorBlack"-->
-        <!--app:showAsAction="ifRoom"-->
-        <!--app:actionViewClass="android.support.v7.widget.SearchView"-->
-        <!--android:title="@string/text_search"/>-->
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@android:drawable/ic_menu_search"
+        app:showAsAction="ifRoom"
+        android:title="@string/refresh"/>
 
 </menu>

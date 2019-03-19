@@ -33,13 +33,16 @@ import butterknife.ButterKnife;
 /* Главная активити приложения */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FragmentListener {
 
+    private final int IMAGE_COUNT = 4; //кол-во предустановленных изображений для HeaderView
+
     @BindView(R.id.nav_view) NavigationView navView;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.content_frame) FrameLayout flContent;
-    ImageView ivHeader;
+    private ImageView ivHeader;
 
     private Fragment currentFragment;
+    private MenuItem menuRefresh;
 
     private ActivityListener listener;
     public void setListener(ActivityListener listener)
@@ -62,9 +65,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        /* Устанавливаем листенер NavigationView */
         navView.setNavigationItemSelectedListener(this);
         navView.getMenu().getItem(0).setChecked(true);
-        setHeaderImage(4);
+        setHeaderImage();
 
         MainFragment fragment = new MainFragment();
         setListener((ActivityListener) fragment);
@@ -86,20 +90,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_main, menu);
+        menuRefresh = menu.findItem(R.id.action_refresh);
+        menuRefresh.setVisible(false);
 
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-//        if (id == R.id.action_search) {
-//
-//        }
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                listener.onRefresh();
+                break;
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
+    /* Навигация NavigationDrawer */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -109,22 +117,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.nav_main:
+            case R.id.nav_main: /* Главный фрагмент со списком типов блюлд */
                 fragment = new MainFragment();
                 setListener((ActivityListener) fragment);
                 break;
             case R.id.nav_favorites:
-                fragment = new FavoriteFragment();
+                fragment = new FavoriteFragment(); /* Фрагмент избранных блюд */
                 setListener((ActivityListener) fragment);
                 break;
-            case R.id.nav_search:
+            case R.id.nav_search: /* Фрагмент поиска блюд по параметрам */
                 fragment = new SearchDetailFragment();
                 setListener((ActivityListener) fragment);
                 break;
-//            case R.id.nav_settings:
-//
-//                break;
-            case R.id.nav_share:
+            case R.id.nav_share: /* Поделиться приложением */
                 final Intent shareAppIntent = new Intent(android.content.Intent.ACTION_SEND);
                 shareAppIntent.setType("plain/text");
                 shareAppIntent.putExtra(android.content.Intent.EXTRA_TEXT, "[PlayMarket app link]");
@@ -132,7 +137,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
 
+        /* Замена фрагмент в content frame */
         if (fragment != null) {
+            menuRefresh.setVisible(false);
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -145,12 +152,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    /** Установка изображения для NavHeader
-     * @param imagesCount - кол-во предустановленных изображений */
-    private void setHeaderImage(int imagesCount) {
+    /** Установка изображения для NavHeader */
+    private void setHeaderImage() {
         Random rand = new Random();
-        int id = rand.nextInt(imagesCount) + 1;
+        int id = rand.nextInt(IMAGE_COUNT) + 1;
         int resId = getResources().getIdentifier("nav_header_" + String.valueOf(id), "drawable", getPackageName());
         ivHeader.setImageResource(resId);
+    }
+
+    @Override
+    public void setRefreshMenuItemVisibility(boolean visible) {
+        if (menuRefresh != null) {
+            menuRefresh.setVisible(visible);
+        }
     }
 }

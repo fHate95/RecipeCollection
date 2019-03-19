@@ -1,10 +1,11 @@
-package com.sanechek.recipecollection;
+package com.sanechek.recipecollection.ui.activity;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.sanechek.recipecollection.App;
 import com.sanechek.recipecollection.injection.AppComponent;
 
 /* Базовая активити, провайдит получение компонента приложения */

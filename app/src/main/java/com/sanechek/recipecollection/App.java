@@ -37,6 +37,7 @@ public class App extends MultiDexApplication {
         //Realm.deleteRealm(realmConfig); // Delete Realm between app restarts.
         Realm.setDefaultConfiguration(realmConfig);
     }
+
     /* Получение компонента приложения
     * Логика получения через context описана в кастомных Activity и Fragment классах */
     public AppComponent getAppComponent() {

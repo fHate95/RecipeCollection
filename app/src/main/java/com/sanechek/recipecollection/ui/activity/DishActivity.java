@@ -14,7 +14,6 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.sanechek.recipecollection.BaseActivity;
 import com.sanechek.recipecollection.R;
 import com.sanechek.recipecollection.adapter.PagingAdapter;
 import com.sanechek.recipecollection.api.data.search.Hit;
