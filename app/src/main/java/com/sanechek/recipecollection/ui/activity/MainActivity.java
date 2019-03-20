@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.sanechek.recipecollection.R;
+import com.sanechek.recipecollection.data.DataHelper;
 import com.sanechek.recipecollection.ui.activity.ActivityListener;
 import com.sanechek.recipecollection.ui.fragment.FavoriteFragment;
 import com.sanechek.recipecollection.ui.fragment.FragmentListener;
@@ -29,6 +30,7 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 
 /* Главная активити приложения */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FragmentListener {
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private Fragment currentFragment;
     private MenuItem menuRefresh;
+    private MenuItem menuMyMenu;
 
     private ActivityListener listener;
     public void setListener(ActivityListener listener)
@@ -91,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_main, menu);
         menuRefresh = menu.findItem(R.id.action_refresh);
+        menuMyMenu = menu.findItem(R.id.action_menu);
         menuRefresh.setVisible(false);
 
         return true;
@@ -101,6 +105,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.action_refresh:
                 listener.onRefresh();
+                break;
+            case R.id.action_menu:
+                Intent intent;
+                if (DataHelper.getMenu(Realm.getDefaultInstance()).isEmpty()) {
+                    intent = new Intent(this, MyMenuActivity.class);
+                } else {
+                    intent = new Intent(this, MyMenuResultActivity.class);
+                }
+                startActivity(intent);
                 break;
         }
 
@@ -139,6 +152,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         /* Замена фрагмент в content frame */
         if (fragment != null) {
+            if (fragment instanceof MainFragment) {
+                menuMyMenu.setVisible(true);
+            } else {
+                menuMyMenu.setVisible(false);
+            }
             menuRefresh.setVisible(false);
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)

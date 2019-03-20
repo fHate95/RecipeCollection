@@ -32,4 +32,10 @@ public interface FoodApi {
                         @Query(ARG_INGR) int ingr, @Query(ARG_DIET) String diet, @Query(ARG_HEALTH) String health,
                         @Query(ARG_CALORIES) String calories);
 
+    @CheckResult
+    @GET("search")
+    Single<Hits> search(@Query(ARG_QUERY) String query, @Query(ARG_FROM) int from, @Query(ARG_TO) int to,
+                        @Query(ARG_DIET) String diet, @Query(ARG_HEALTH) String health,
+                        @Query(ARG_CALORIES) String calories);
+
 }

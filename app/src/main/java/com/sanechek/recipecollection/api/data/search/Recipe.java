@@ -39,7 +39,7 @@ public class Recipe implements Parcelable {
     private String shareAs;
 
     @SerializedName("yield")
-    private int yield;
+    private float yield;
 
     @SerializedName("calories")
     private float calories;
@@ -83,7 +83,7 @@ public class Recipe implements Parcelable {
         return shareAs;
     }
 
-    public int getYield() {
+    public float getYield() {
         return yield;
     }
 
@@ -139,7 +139,7 @@ public class Recipe implements Parcelable {
         parcel.writeString(source);
         parcel.writeString(url);
         parcel.writeString(shareAs);
-        parcel.writeInt(yield);
+        parcel.writeFloat(yield);
         parcel.writeFloat(calories);
         parcel.writeFloat(totalWeight);
         parcel.writeTypedList(ingredients);
@@ -155,7 +155,7 @@ public class Recipe implements Parcelable {
         source = in.readString();
         url = in.readString();
         shareAs = in.readString();
-        yield = in.readInt();
+        yield = in.readFloat();
         calories = in.readFloat();
         totalWeight = in.readFloat();
         ingredients = in.createTypedArrayList(Ingredient.CREATOR);

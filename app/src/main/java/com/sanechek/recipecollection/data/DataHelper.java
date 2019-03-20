@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 
 public class DataHelper {
 
@@ -40,6 +41,23 @@ public class DataHelper {
 
     public static Favorite getFavoriteById(Realm realm, String id) {
         return realm.where(Favorite.class).equalTo(Favorite.getFieldId(), id).findFirst();
+    }
+
+    public static void addMenu(Realm realm, final Menu item) {
+        realm.executeTransaction(realm1 -> Menu.create(realm1, item));
+    }
+
+    public static void deleteMenu(Realm realm, final Menu item) {
+        realm.executeTransaction(realm1 -> Menu.delete(realm1, item.getDay()));
+    }
+
+    public static void clearMenus(Realm realm) {
+        realm.where(Menu.class).findAll().deleteAllFromRealm();
+    }
+
+    public static ArrayList<Menu> getMenu(Realm realm) {
+        RealmResults<Menu> realmResults = Realm.getDefaultInstance().where(Menu.class).findAll();
+        return new ArrayList<>(realmResults);
     }
 
 }

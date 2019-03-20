@@ -34,4 +34,9 @@ public class ApiDelegate implements FoodApi {
     public Single<Hits> search(String query, int from, int to, int ingr, @Nullable String diet, @Nullable String health, String calories) {
         return internal.search(query, from, to, ingr, diet, health, calories, BuildConfig.APP_ID, BuildConfig.APP_KEY);
     }
+
+    @Override
+    public Single<Hits> search(String query, int from, int to, String diet, String health, String calories) {
+        return internal.search(query, from, to, diet, health, calories, BuildConfig.APP_ID, BuildConfig.APP_KEY);
+    }
 }

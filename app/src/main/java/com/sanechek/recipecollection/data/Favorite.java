@@ -25,7 +25,7 @@ public class Favorite extends RealmObject implements Parcelable {
     private String source;
     private String url;
     private String shareAs;
-    private int yield;
+    private float yield;
     private float calories;
     private float totalWeight;
     private RealmList<String> dietLabels;
@@ -161,7 +161,7 @@ public class Favorite extends RealmObject implements Parcelable {
         return shareAs;
     }
 
-    public int getYield() {
+    public float getYield() {
         return yield;
     }
 
@@ -218,7 +218,7 @@ public class Favorite extends RealmObject implements Parcelable {
         parcel.writeString(source);
         parcel.writeString(url);
         parcel.writeString(shareAs);
-        parcel.writeInt(yield);
+        parcel.writeFloat(yield);
         parcel.writeFloat(calories);
         parcel.writeFloat(totalWeight);
         parcel.writeStringList(dietLabels);
