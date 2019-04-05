@@ -69,4 +69,9 @@ public class Utils {
         window.getDecorView().clearFocus();
     }
 
+    public static int getStringId(Context context, String name) {
+        return context.getResources().getIdentifier(name,
+                "string", context.getPackageName());
+    }
+
 }

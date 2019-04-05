@@ -39,6 +39,19 @@
     <string name="max_cal_label">Maximum calories per day</string>
     <string name="apply">Apply</string>
     <string name="setup_menu">Setup menu</string>
+    <string name="refresh_confirm">Are you sure you want to refresh your menu?</string>
+    <string name="menu_error">Sorry, error occurred while composing menu. Try with another parameters.</string>
+    <string name="per_serving">per serving</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="lunch">Lunch</string>
+    <string name="dinner">Dinner</string>
+    <string name="day_of_week_0">Monday</string>
+    <string name="day_of_week_1">Tuesday</string>
+    <string name="day_of_week_2">Wednesday</string>
+    <string name="day_of_week_3">Thursday</string>
+    <string name="day_of_week_4">Friday</string>
+    <string name="day_of_week_5">Saturday</string>
+    <string name="day_of_week_6">Sunday</string>
 
     <!--Error messages-->
     <string name="error_request_limit">Request limit exceeded</string>

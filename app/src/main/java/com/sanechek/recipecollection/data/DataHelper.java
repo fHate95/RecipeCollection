@@ -52,7 +52,7 @@ public class DataHelper {
     }
 
     public static void clearMenus(Realm realm) {
-        realm.where(Menu.class).findAll().deleteAllFromRealm();
+        realm.executeTransaction(realm1 -> realm1.where(Menu.class).findAll().deleteAllFromRealm());
     }
 
     public static ArrayList<Menu> getMenu(Realm realm) {

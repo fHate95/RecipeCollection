@@ -1,9 +1,7 @@
 package com.sanechek.recipecollection.data;
 
-import com.sanechek.recipecollection.api.data.search.Recipe;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -12,10 +10,10 @@ public class Menu extends RealmObject {
     public static final String PRIMARY_KEY = "day";
 
     @PrimaryKey
-    int day;
-    Favorite breakfast;
-    Favorite lunch;
-    Favorite dinner;
+    private int day;
+    private Favorite breakfast;
+    private Favorite lunch;
+    private Favorite dinner;
 
     public int getDay() {
         return day;

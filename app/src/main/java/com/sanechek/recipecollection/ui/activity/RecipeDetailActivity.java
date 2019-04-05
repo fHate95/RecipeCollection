@@ -8,6 +8,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class RecipeDetailActivity extends BaseActivity {
     private AppComponent appComponent;
 
     private Favorite recipe;
+    private boolean isFromMenu = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class RecipeDetailActivity extends BaseActivity {
         /* получаем элемент рецепта из Intent */
         if (getIntent() != null) {
             recipe = getIntent().getParcelableExtra(KeyProvider.KEY_RECIPE);
+            isFromMenu = getIntent().getBooleanExtra("from_menu", false);
             if (recipe != null) {
                 setupData();
             }
@@ -102,17 +105,23 @@ public class RecipeDetailActivity extends BaseActivity {
         tvSource.setText(recipe.getSource());
         StringBuilder text = new StringBuilder();
         text.append(getString(R.string.ingredients));
-            for (String ingredient : recipe.getIngredientLines()) {
-                try {
-                    text.append("\n");
-                    text.append("* ").append(ingredient);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        for (String ingredient : recipe.getIngredientLines()) {
+            try {
+                text.append("\n");
+                text.append("* ").append(ingredient);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         tvContent.setText(text.toString());
-        if (DataHelper.getFavoriteById(Realm.getDefaultInstance(), recipe.getUri()) != null) {
-            ivStar.setImageResource(R.drawable.ic_star_checked);
+        if (isFromMenu) {
+            ivStar.setVisibility(View.INVISIBLE);
+        } else {
+            if (DataHelper.getFavoriteById(Realm.getDefaultInstance(), recipe.getUri()) != null) {
+                ivStar.setImageResource(R.drawable.ic_star_checked);
+            } else {
+                ivStar.setImageResource(R.drawable.ic_star);
+            }
         }
     }
 
