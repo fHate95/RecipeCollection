@@ -13,5 +13,6 @@ public interface FragmentListener {
     default List<Menu> getMenu() {
         return new ArrayList<>();
     }
+    default void showMainFragment() {};
 
 }

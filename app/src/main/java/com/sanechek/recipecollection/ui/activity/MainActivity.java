@@ -24,6 +24,7 @@ import com.sanechek.recipecollection.ui.activity.ActivityListener;
 import com.sanechek.recipecollection.ui.fragment.FavoriteFragment;
 import com.sanechek.recipecollection.ui.fragment.FragmentListener;
 import com.sanechek.recipecollection.ui.fragment.MainFragment;
+import com.sanechek.recipecollection.ui.fragment.MyDietFragment;
 import com.sanechek.recipecollection.ui.fragment.SearchDetailFragment;
 
 import java.util.Random;
@@ -121,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /* Навигация NavigationDrawer */
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -132,6 +132,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (id) {
             case R.id.nav_main: /* Главный фрагмент со списком типов блюлд */
                 fragment = new MainFragment();
+                setListener((ActivityListener) fragment);
+                break;
+            case R.id.nav_diet:
+                fragment = new MyDietFragment();
                 setListener((ActivityListener) fragment);
                 break;
             case R.id.nav_favorites:
@@ -168,6 +172,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void showMainFragment() {
+        menuMyMenu.setVisible(true);
+        MainFragment fragment = new MainFragment();
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .replace(R.id.content_frame, fragment)
+                .commit();
+        currentFragment = fragment;
     }
 
     /** Установка изображения для NavHeader */

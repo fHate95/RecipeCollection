@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.sanechek.recipecollection.R;
+import com.sanechek.recipecollection.data.AppSettings;
 import com.sanechek.recipecollection.data.DataHelper;
 import com.sanechek.recipecollection.util.KeyProvider;
 import com.sanechek.recipecollection.util.Utils;
@@ -22,30 +23,40 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 
+@SuppressLint("SetTextI18n")
 public class MyMenuActivity extends BaseActivity {
 
     @BindView(R.id.root_view) ConstraintLayout rootView;
     @BindView(R.id.sb_cal) SeekBar sbCal;
     @BindView(R.id.tv_cal_count) TextView tvCalCount;
+    @BindView(R.id.tv_cal_label) TextView tvCalLabel;
     @BindView(R.id.spinner_diet) Spinner spinnerDiet;
     @BindView(R.id.spinner_health) Spinner spinnerHealth;
     @BindView(R.id.btn_apply) Button btnApply;
 
-    @SuppressLint("SetTextI18n")
+    private AppSettings appSettings;
+    private int recommendedCal = -1;
+
+    int minimumValueCal = 1200;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_menu);
         ButterKnife.bind(this);
 
-        Utils.log("TAG_TAG_TAG_SUKA", "Saved menus size: " + DataHelper.getMenu(Realm.getDefaultInstance()).size());
+        appSettings = DataHelper.getAppSettings();
+        if (appSettings.isCaloriesSetted()) {
+            recommendedCal = appSettings.getCalories();
+            updateRecommendedCal();
+        }
 
         configureSpinners();
         tvCalCount.setText(String.valueOf(2000) + " " + getString(R.string.kcal));
         sbCal.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                tvCalCount.setText(i + " " + getString(R.string.kcal));
+                tvCalCount.setText((minimumValueCal + i) + " " + getString(R.string.kcal));
             }
 
             @Override
@@ -61,7 +72,7 @@ public class MyMenuActivity extends BaseActivity {
 
         btnApply.setOnClickListener(view -> {
             Intent intent = new Intent(this, MyMenuResultActivity.class);
-            intent.putExtra("cal", sbCal.getProgress());
+            intent.putExtra("cal", minimumValueCal + sbCal.getProgress());
             intent.putExtra("diet", spinnerDiet.getSelectedItem().toString().equals(KeyProvider.KEY_NONE) ? null :
                     spinnerDiet.getSelectedItem().toString().toLowerCase().replace(" ", "-"));
             intent.putExtra("health", spinnerHealth.getSelectedItem().toString().equals(KeyProvider.KEY_NONE) ? null :
@@ -69,6 +80,10 @@ public class MyMenuActivity extends BaseActivity {
             startActivity(intent);
             finish();
         });
+    }
+
+    private void updateRecommendedCal() {
+        tvCalLabel.setText(getString(R.string.max_cal_label) + " (" + getString(R.string.recommended) + " " + recommendedCal + ")");
     }
 
     /* Настройка спиннеров */
@@ -81,7 +96,17 @@ public class MyMenuActivity extends BaseActivity {
         spinnerDiet.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                //Utils.makeToast(requireContext(), spinnerDiet.getSelectedItem().toString().toLowerCase().replace(" ", "-"));
+                if (appSettings.isCaloriesSetted()) {
+                    recommendedCal = appSettings.getCalories();
+                    if (pos == 0 || pos == 1) {
+                        recommendedCal = appSettings.getCalories();
+                    } else if (pos == 2 || pos == 3) {
+                        recommendedCal += recommendedCal * 0.2;
+                    } else if (pos == 4 || pos == 5) {
+                        recommendedCal -= recommendedCal * 0.3;
+                    }
+                    updateRecommendedCal();
+                }
             }
 
             @Override

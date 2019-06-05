@@ -1,6 +1,8 @@
 package com.sanechek.recipecollection.data;
 
 
+import android.support.annotation.NonNull;
+
 import com.sanechek.recipecollection.util.Utils;
 
 import java.util.ArrayList;
@@ -10,6 +12,25 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class DataHelper {
+
+    public static void createOrUpdateSettings(final AppSettings item) {
+        Realm.getDefaultInstance().executeTransaction(realm -> realm.copyToRealmOrUpdate(item));
+    }
+
+    @NonNull
+    public static AppSettings getAppSettings() {
+        AppSettings settings = Realm.getDefaultInstance().where(AppSettings.class).findFirst();
+        if (settings != null) {
+            return settings;
+        } else {
+            return new AppSettings();
+        }
+    }
+
+
+    public static void clearAppSettings() {
+        Realm.getDefaultInstance().executeTransaction(realm -> realm.where(AppSettings.class).findAll().deleteAllFromRealm());
+    }
 
     public static void addFavorite(Realm realm, final Favorite item) {
         realm.executeTransaction(realm1 -> Favorite.create(realm1, item));
